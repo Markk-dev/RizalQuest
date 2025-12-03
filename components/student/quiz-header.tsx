@@ -18,17 +18,17 @@ export default function QuizHeader({ hearts, progress }: QuizHeaderProps) {
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white z-50">
-      <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-        {/* Exit Button */}
+      <div className="flex items-center gap-4 px-4 py-4">
+        {/* Exit Button - In corner */}
         <button
           onClick={handleExit}
-          className="text-gray-400 hover:text-gray-500 transition shrink-0"
+          className="p-2 rounded-xl bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 border-b-4 border-b-red-700 active:translate-y-[2px] active:border-b-2 transition-all shrink-0"
         >
-          <X size={24} strokeWidth={2} />
+          <X size={20} strokeWidth={3} />
         </button>
 
         {/* Progress Bar */}
-        <div className="flex-1">
+        <div className="flex-1 max-w-3xl mx-auto">
           <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-green-500 transition-all duration-300"

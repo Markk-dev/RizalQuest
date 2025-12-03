@@ -33,25 +33,40 @@ export default function StudentAuthPage() {
         setError("Username must be at least 3 characters")
         return
       }
+      if (!fullName) {
+        setError("Full name is required")
+        return
+      }
     }
 
     setLoading(true)
 
     try {
-      // TODO: Implement actual authentication with Appwrite
-      if (username && password) {
-        const userData = isLogin 
-          ? { username, role: "student" }
-          : { username, fullName, role: "student" }
-        
-        localStorage.setItem("user", JSON.stringify(userData))
-        localStorage.setItem("userRole", "student")
-        router.push("/student/learn")
-      } else {
-        setError("Please fill in all fields")
+      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register"
+      const body = isLogin 
+        ? { username, password }
+        : { username, password, fullName, role: "student" }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed")
       }
-    } catch (err) {
-      setError(isLogin ? "Login failed. Please try again." : "Signup failed. Please try again.")
+
+      // Store user data
+      localStorage.setItem("user", JSON.stringify(data.user))
+      localStorage.setItem("userId", data.user.$id)
+      localStorage.setItem("userRole", data.user.role)
+      
+      router.push("/student/learn")
+    } catch (err: any) {
+      setError(err.message || (isLogin ? "Login failed. Please try again." : "Signup failed. Please try again."))
     } finally {
       setLoading(false)
     }

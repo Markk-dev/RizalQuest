@@ -1,5 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation"
 import { NotebookText } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +13,7 @@ type UnitBannerProps = {
 };
 
 export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) => {
+  const router = useRouter()
   // Chapter color mapping
   const chapterColors = {
     1: { bg: "bg-green-500", btn: "bg-green-600 hover:bg-green-700 border-green-700" },
@@ -32,16 +35,15 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
         <p className="text-lg">{description}</p>
       </div>
 
-      <Link href="/student/learn">
-        <Button
-          size="lg"
-          variant="secondary"
-          className={cn("hidden border-2 border-b-4 active:border-b-2 xl:flex text-white", colors.btn)}
-        >
-          <NotebookText className="mr-2" />
-          Continue
-        </Button>
-      </Link>
+      <Button
+        size="lg"
+        variant="secondary"
+        onClick={() => router.push(`/student/learn/story/${chapterId}`)}
+        className={cn("hidden border-2 border-b-4 active:border-b-2 xl:flex text-white", colors.btn)}
+      >
+        <NotebookText className="mr-2" />
+        READ
+      </Button>
     </div>
   );
 };

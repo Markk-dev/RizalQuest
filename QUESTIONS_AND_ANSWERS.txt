@@ -1,0 +1,394 @@
+RIZAL QUEST - ALL QUESTIONS AND ANSWERS
+========================================
+
+This file contains all questions and their correct answers for easy editing.
+After editing, you'll need to update the lib/questions.ts file.
+
+================================================================================
+CHAPTER 1: CHILDHOOD AND EARLY LIFE
+================================================================================
+
+--- LEVEL 1 ---
+
+Q1: Where did José Rizal grow up?
+Type: Multiple Choice
+Options:
+  A. Manila
+  B. Calamba ✓ (CORRECT)
+  C. Dapitan
+  D. Laguna
+
+Q2: What did young Rizal love to do?
+Type: Multiple Choice
+Options:
+  A. Playing sports
+  B. Reading books and drawing ✓ (CORRECT)
+  C. Farming
+  D. Cooking
+
+Q3: Who was Rizal's first teacher?
+Type: Multiple Choice
+Options:
+  A. School teachers
+  B. His friends
+  C. His Mother ✓ (CORRECT)
+  D. The neighbors
+
+Q4: What was Rizal's nickname?
+Type: Typing
+Correct Answer: pepe
+
+//revised
+Q5: 6. Who guided Pepe as an older brother?
+A. Justo
+B. Paciano ✓
+C. Mariano
+D. Miguel
+
+--- LEVEL 2 ---
+
+Q1: How was Rizal at first in school?
+Type: Multiple Choice
+Options:
+  A. Very loud
+  B. Shy ✓ (CORRECT)
+  C. Angry
+  D. Lazy
+
+//revised
+Q2: What was the name of Pepe’s pony?
+A. Alipato ✓
+B. Pinto
+C. Malaya
+D. Tagpi
+
+Q4: What passion did Rizal discover?
+Type: Multiple Choice
+Options:
+  A. Cooking
+  B. Writing and art ✓ (CORRECT)
+  C. Sports
+  D. Music
+
+Q5: Arrange these words:
+Type: Word Arrangement
+Words: School, life, prepared, Rizal
+Correct Order: School, life, prepared, Rizal
+
+--- LEVEL 3 ---
+
+Q1: Classify these activities Rizal did:
+Type: Classification
+Items: Reading books, Playing sports, Drawing, Writing
+Categories: Academic, Physical
+Correct Mapping:
+  - Reading books → Academic
+  - Drawing → Academic
+  - Writing → Academic
+  - Playing sports → Physical
+
+//REVISED
+Q2: Who was Usman?
+A. His cousin
+B. His teacher
+C. His dog ✓
+D. His neighbor
+
+//revised
+Q3: What story did his mother tell him?
+typing 
+The moth and the flame ✓
+
+
+Q4: Rizal's family was known for being:
+Type: Multiple Choice
+Options:
+  A. Poor
+  B. Educated ✓ (CORRECT)
+  C. Lazy
+  D. Angry
+
+Q5: Young Rizal showed talent in:
+Type: Multiple Choice
+Options:
+  A. Fighting
+  B. Art and writing ✓ (CORRECT)
+  C. Cooking
+  D. Dancing
+
+--- LEVEL 4 ---
+Q2: What values did Rizal's parents teach him?
+Type: Multiple Choice
+Options:
+  A. Laziness
+  B. Good manners and respect ✓ (CORRECT)
+  C. Fighting
+  D. Stealing
+
+//revised 
+Q3: What did Pepe love doing as a child?
+A. Cooking
+B. Reading, drawing, and making clay figures ✓
+C. Farming
+D. Sewing
+
+//revised 
+Q4: How old was Pepe when he learned the alphabet?
+A. 2 years old
+B. 3 years old ✓
+C. 5 years old
+D. 7 years old
+
+Q5: Arrange the words:
+Type: Word Arrangement
+Words: Rizal, loved, his, family
+Correct Order: Rizal, loved, his, family
+
+--- LEVEL 5 ---
+
+Q1: Arrange these words to form a sentence about Rizal:
+Type: Word Arrangement
+Words: Rizal, was, a, curious, child
+Correct Order: Rizal, was, a, curious, child
+
+Q2: What made Rizal different from other children?
+Type: Multiple Choice
+Options:
+  A. He was lazy
+  B. He was very curious and smart ✓ (CORRECT)
+  C. He was mean
+  D. He was shy
+
+//revised
+Q3: What is Jose Rizal's full name?
+Type: Typing
+Correct Answer: José Protasio Rizal Mercado y Alonso Realonda
+
+/revised
+Q4: José Rizal lived in a big family with __ brothers and sisters. 
+Type: Multiple Choice
+Options:
+  A. 5
+  B. 11 ✓ (CORRECT)
+  C. 4
+  D. 7
+
+//revised
+Q5: He was the __ child in the middle of his big family.
+Type:  Multiple Choice
+Correct Answers: 7th 
+
+================================================================================
+CHAPTER 2: STUDENT YEARS
+================================================================================
+
+--- LEVEL 1 ---
+
+Q1: Match Rizal's subjects with their descriptions:
+Type: Matching
+Pairs:
+  - Spanish → Language he learned
+  - Science → Study of nature
+  - Math → Numbers and calculations
+
+Q2: Where did Rizal study?
+Type: Multiple Choice
+Options:
+  A. One school only
+  B. Different schools ✓ (CORRECT)
+  C. At home
+  D. Abroad only
+
+Q3: How did Rizal approach his studies?
+Type: Typing
+Correct Answer: hard
+
+Q4: What subjects did Rizal learn?
+Type: Multiple Choice
+Options:
+  A. Only math
+  B. Spanish, science, math and more ✓ (CORRECT)
+  C. Only art
+  D. Only history
+
+Q5: Arrange the words:
+Type: Word Arrangement
+Words: Rizal, was, an, excellent, student
+Correct Order: Rizal, was, an, excellent, student
+
+--- LEVEL 2 ---
+
+Q1: How did Rizal work in his lessons?
+Type: Multiple Choice
+Options:
+  A. Lazily
+  B. Hard ✓ (CORRECT)
+  C. Slowly
+  D. Never
+
+Q2: What did teachers think of Rizal?
+Type: Typing
+Correct Answer: respectful
+
+Q3: Rizal was known for being:
+Type: Multiple Choice
+Options:
+  A. Lazy
+  B. Disciplined and polite ✓ (CORRECT)
+  C. Rude
+  D. Careless
+
+Q4: Rizal studied ___ and ___.
+Type: Fill in the Blanks
+Correct Answers: hard, well
+
+Q5: What made Rizal stand out in school?
+Type: Multiple Choice
+Options:
+  A. His height
+  B. His intelligence and discipline ✓ (CORRECT)
+  C. His wealth
+  D. His age
+
+--- LEVEL 3 ---
+
+Q1: What passion did Rizal discover? (Type one word)
+Type: Typing
+Correct Answer: writing
+
+Q2: Rizal excelled in:
+Type: Multiple Choice
+Options:
+  A. Sports only
+  B. Academic subjects ✓ (CORRECT)
+  C. Music only
+  D. Nothing
+
+Q3: Classify Rizal's activities:
+Type: Classification
+Items: Writing, Drawing, Running, Swimming
+Categories: Arts, Sports
+Correct Mapping:
+  - Writing → Arts
+  - Drawing → Arts
+  - Running → Sports
+  - Swimming → Sports
+
+Q4: What language did Rizal master?
+Type: Multiple Choice
+Options:
+  A. English
+  B. Spanish ✓ (CORRECT)
+  C. French
+  D. German
+
+Q5: Arrange:
+Type: Word Arrangement
+Words: Rizal, loved, to, learn
+Correct Order: Rizal, loved, to, learn
+
+--- LEVEL 4 ---
+
+Q1: Arrange: Rizal studied at different schools
+Type: Word Arrangement
+Words: Rizal, studied, at, different, schools
+Correct Order: Rizal, studied, at, different, schools
+
+Q2: Rizal's education helped him become:
+Type: Multiple Choice
+Options:
+  A. A farmer
+  B. A national hero ✓ (CORRECT)
+  C. A chef
+  D. A soldier
+
+Q3: What did Rizal discover a passion for?
+Type: Typing
+Correct Answer: art
+
+Q4: Teachers respected Rizal because he was:
+Type: Multiple Choice
+Options:
+  A. Rich
+  B. Disciplined and polite ✓ (CORRECT)
+  C. Tall
+  D. Old
+
+Q5: Rizal was a ___ student who loved ___.
+Type: Fill in the Blanks
+Correct Answers: dedicated, learning
+
+--- LEVEL 5 ---
+
+Q1: Classify these traits of Rizal:
+Type: Classification
+Items: Disciplined, Lazy, Polite, Rude
+Categories: Positive, Negative
+Correct Mapping:
+  - Disciplined → Positive
+  - Polite → Positive
+  - Lazy → Negative
+  - Rude → Negative
+
+Q2: What did school life prepare Rizal for?
+Type: Multiple Choice
+Options:
+  A. Nothing
+  B. Bigger challenges ✓ (CORRECT)
+  C. Farming
+  D. Business
+
+Q3: What quality made Rizal successful?
+Type: Typing
+Correct Answer: discipline
+
+Q4: Arrange:
+Type: Word Arrangement
+Words: Education, shaped, Rizal's, future
+Correct Order: Education, shaped, Rizal's, future
+
+Q5: Rizal's student years were:
+Type: Multiple Choice
+Options:
+  A. Wasted
+  B. Very productive ✓ (CORRECT)
+  C. Boring
+  D. Short
+
+================================================================================
+NOTES FOR EDITING:
+================================================================================
+
+1. Multiple Choice Questions:
+   - The correct answer is marked with ✓
+   - Options are labeled A, B, C, D
+   - The "correct" field in the code uses index (0=A, 1=B, 2=C, 3=D)
+
+2. Typing Questions:
+   - Answer is case-insensitive in the code
+   - Keep answers simple (one word preferred)
+
+3. Word Arrangement:
+   - Words will be shuffled when displayed
+   - Correct order must match exactly
+
+4. Classification:
+   - Items will be dragged to categories
+   - Each item must map to exactly one category
+
+5. Fill in the Blanks:
+   - Two blanks per question
+   - Order matters (first blank, second blank)
+
+6. Matching:
+   - Pairs of left and right items
+   - Used for connecting related concepts
+
+================================================================================
+TO UPDATE QUESTIONS:
+================================================================================
+
+After editing this file, update the corresponding section in:
+lib/questions.ts
+
+Make sure to maintain the same structure and data types!

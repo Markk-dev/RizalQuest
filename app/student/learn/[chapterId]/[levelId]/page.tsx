@@ -6,6 +6,7 @@ import QuestionRenderer from "@/components/student/question-renderer"
 import QuizHeader from "@/components/student/quiz-header"
 import { CHAPTERS } from "@/lib/constants"
 import { getQuestionsForLevel } from "@/lib/questions"
+import { syncHearts, syncXP, syncCompletedLevel, syncCurrentProgress, loadProgress } from "@/lib/progress-sync"
 import storyline from "@/storyline.json"
 
 export default function LessonPage() {
@@ -18,41 +19,78 @@ export default function LessonPage() {
   const [isCorrect, setIsCorrect] = useState(false)
   const [questions, setQuestions] = useState<any[]>([])
   const [hearts, setHearts] = useState(5)
+  const [xp, setXp] = useState(0)
 
   const chapter = CHAPTERS.find((c) => c.id === chapterId)
   const chapterData = storyline.chapters.find((c) => c.chapter === chapterId)
 
   useEffect(() => {
+    // Check if user has access to this level
+    const currentLevelData = JSON.parse(localStorage.getItem("currentLevel") || '{"chapter": 1, "level": 1}')
+    const completedLevelsData = JSON.parse(localStorage.getItem("completedLevels") || "[]")
+    
+    // Check if trying to access a level beyond current progress
+    const isCurrentLevel = currentLevelData.chapter === chapterId && currentLevelData.level === levelId
+    const isPreviousLevel = completedLevelsData.includes(`${chapterId}-${levelId}`)
+    const isAccessible = isCurrentLevel || isPreviousLevel
+    
+    // If trying to access a locked level, redirect back
+    if (!isAccessible) {
+      router.push("/student/learn")
+      return
+    }
+    
     const levelQuestions = getQuestionsForLevel(chapterId, levelId)
     setQuestions(levelQuestions)
     
-    // Load hearts from localStorage
-    const savedHearts = localStorage.getItem("hearts")
-    if (savedHearts) {
-      setHearts(Number(savedHearts))
+    // Load progress from database
+    loadProgress().then((progress) => {
+      if (progress) {
+        // Load from database
+        const user = JSON.parse(localStorage.getItem("user") || "{}")
+        const userHearts = user.hearts ?? 5
+        setHearts(userHearts)
+        setXp(user.xp || 0)
+        
+        // Redirect if no hearts
+        if (userHearts === 0) {
+          router.push("/student/learn")
+        }
+      } else {
+        // Fallback to localStorage
+        const savedHearts = localStorage.getItem("hearts")
+        if (savedHearts) {
+          setHearts(Number(savedHearts))
+        }
+      }
+    })
+
+    // Listen for heart updates
+    const handleHeartsUpdated = (event: any) => {
+      setHearts(event.detail.hearts)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+
+    // Listen for XP updates
+    const handleXPUpdated = (event: any) => {
+      setXp(event.detail.xp)
+    }
+    window.addEventListener("xpUpdated", handleXPUpdated)
+
+    return () => {
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
+      window.removeEventListener("xpUpdated", handleXPUpdated)
     }
   }, [chapterId, levelId])
 
   const handleAnswer = (selectedIndex: number) => {
+    // Heart logic is handled in quiz-question component
+    // Just track if answer is correct for any additional logic if needed
     const correct = selectedIndex === currentQuestion.correct
     setIsCorrect(correct)
-    
-    // Decrease heart if wrong answer
-    if (!correct) {
-      const newHearts = Math.max(0, hearts - 1)
-      setHearts(newHearts)
-      localStorage.setItem("hearts", String(newHearts))
-      
-      // If no hearts left, redirect to chapter grid
-      if (newHearts === 0) {
-        setTimeout(() => {
-          router.push("/student/learn")
-        }, 2000)
-      }
-    }
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       // Next question in this level
       setCurrentQuestionIndex(currentQuestionIndex + 1)
@@ -64,18 +102,49 @@ export default function LessonPage() {
       completed.add(levelKey)
       localStorage.setItem("completedLevels", JSON.stringify([...completed]))
 
-      // Update current level to next
-      const isLastLevel = levelId >= 6
+      // Sync completed level to database
+      await syncCompletedLevel(levelKey).catch(console.error)
 
-      if (!isLastLevel) {
-        localStorage.setItem(
-          "currentLevel",
-          JSON.stringify({ chapter: chapterId, level: levelId + 1 })
-        )
+      // Check if this completes the platform (all 5 levels)
+      const isLastLevel = levelId >= 5
+      
+      // Award XP only when completing all 5 levels (completing the platform)
+      if (isLastLevel) {
+        const user = JSON.parse(localStorage.getItem("user") || "{}")
+        const newXP = (user.xp || 0) + 20 // 20 XP per platform (5 levels)
+        user.xp = newXP
+        localStorage.setItem("user", JSON.stringify(user))
+        setXp(newXP)
+        await syncXP(newXP).catch(console.error)
+        
+        // Dispatch event to update UI
+        window.dispatchEvent(new CustomEvent("xpUpdated", { detail: { xp: newXP } }))
       }
 
-      if (isLastLevel) {
-        // Go back to chapter grid
+      // Update current level to next
+
+      const nextChapter = isLastLevel ? chapterId + 1 : chapterId
+      const nextLevel = isLastLevel ? 1 : levelId + 1
+
+      if (!isLastLevel || chapterId < 8) {
+        localStorage.setItem(
+          "currentLevel",
+          JSON.stringify({ chapter: nextChapter, level: nextLevel })
+        )
+        
+        // Sync current progress to database
+        await syncCurrentProgress(
+          nextChapter,
+          nextLevel,
+          [...completed]
+        ).catch(console.error)
+      }
+
+      if (isLastLevel && chapterId >= 8) {
+        // Completed all chapters!
+        router.push("/student/learn")
+      } else if (isLastLevel) {
+        // Go to next chapter
         router.push("/student/learn")
       } else {
         // Go to next level

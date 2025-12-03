@@ -18,6 +18,7 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
   const [answered, setAnswered] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState(5)
+  const [shuffledRightItems, setShuffledRightItems] = useState<string[]>([])
 
   useEffect(() => {
     const savedHearts = localStorage.getItem("hearts")
@@ -25,6 +26,19 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
       setHearts(Number(savedHearts))
     }
   }, [])
+
+  useEffect(() => {
+    // Shuffle right column items when question changes
+    const rightItems = question.pairs.map(pair => pair.right)
+    const shuffled = [...rightItems]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    setShuffledRightItems(shuffled)
+    setMatches({})
+    setAnswered(false)
+  }, [question])
 
   const handleMatch = (left: string, right: string) => {
     if (!answered) {
@@ -47,10 +61,18 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
   }
 
   const handleNext = () => {
-    setMatches({})
-    setAnswered(false)
-    setIsCorrect(false)
-    onNext()
+    if (isCorrect) {
+      // If correct, move to next question
+      setMatches({})
+      setAnswered(false)
+      setIsCorrect(false)
+      onNext()
+    } else {
+      // If wrong, just reset to try again
+      setMatches({})
+      setAnswered(false)
+      setIsCorrect(false)
+    }
   }
 
   const isComplete = Object.keys(matches).length === question.pairs.length
@@ -76,24 +98,31 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
               </div>
             ))}
           </div>
-          {/* Right column */}
+          {/* Right column - shuffled */}
           <div className="space-y-4">
-            {question.pairs.map((pair, idx) => (
-              <button
-                key={`right-${idx}`}
-                onClick={() => handleMatch(pair.left, pair.right)}
-                disabled={answered}
-                className={`w-full p-5 rounded-2xl border-2 border-b-4 transition-all text-left font-semibold text-lg active:border-b-2 ${
-                  matches[pair.left] === pair.right
-                    ? answered && isCorrect
-                      ? "border-green-500 border-b-green-600 bg-green-50 text-black"
-                      : "border-green-500 border-b-green-600 bg-green-50 text-black"
-                    : "border-gray-300 bg-white text-black hover:border-green-500 hover:bg-gray-50"
-                }`}
-              >
-                {pair.right}
-              </button>
-            ))}
+            {shuffledRightItems.map((rightItem, idx) => {
+              // Find which left item this right item belongs to
+              const correctPair = question.pairs.find(p => p.right === rightItem)
+              const leftItem = correctPair?.left || ''
+              const isMatched = matches[leftItem] === rightItem
+              
+              return (
+                <button
+                  key={`right-${idx}`}
+                  onClick={() => handleMatch(leftItem, rightItem)}
+                  disabled={answered}
+                  className={`w-full p-5 rounded-2xl border-2 border-b-4 transition-all text-left font-semibold text-lg active:border-b-2 ${
+                    isMatched
+                      ? answered && isCorrect
+                        ? "border-green-500 border-b-green-600 bg-green-50 text-black"
+                        : "border-green-500 border-b-green-600 bg-green-50 text-black"
+                      : "border-gray-300 bg-white text-black hover:border-green-500 hover:bg-gray-50"
+                  }`}
+                >
+                  {rightItem}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -130,7 +159,7 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
                 variant="secondary" 
                 size="lg" 
                 onClick={handleNext}
-                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 border-b-4 border-b-red-700 active:border-b-2" : ""}
               >
                 {isCorrect ? "Next" : "Try again"}
               </Button>

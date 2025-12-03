@@ -1,9 +1,12 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Crown, Star, Check } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { CircularProgressbarWithChildren } from "react-circular-progressbar"
 import { cn } from "@/lib/utils"
+import NoHeartsModal from "./no-hearts-modal"
 
 import "react-circular-progressbar/dist/styles.css"
 
@@ -17,6 +20,27 @@ type LessonButtonProps = {
 }
 
 export const LessonButton = ({ id, index, totalCount, locked, current, percentage }: LessonButtonProps) => {
+  const router = useRouter()
+  const [hasHearts, setHasHearts] = useState(true)
+  const [showNoHeartsModal, setShowNoHeartsModal] = useState(false)
+  
+  useEffect(() => {
+    // Check hearts on client side only
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    setHasHearts((user.hearts ?? 5) > 0)
+    
+    // Listen for heart updates
+    const handleHeartsUpdated = (event: any) => {
+      setHasHearts(event.detail.hearts > 0)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+    
+    return () => {
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
+    }
+  }, [])
+  
+  const isClickable = !locked && hasHearts
   const cycleLength = 8
   const cycleIndex = index % cycleLength
 
@@ -54,9 +78,19 @@ export const LessonButton = ({ id, index, totalCount, locked, current, percentag
   }
 
   const colors = chapterColors[chapterId as keyof typeof chapterColors] || chapterColors[1]
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (!hasHearts && !locked) {
+      e.preventDefault()
+      setShowNoHeartsModal(true)
+    }
+  }
 
   return (
-    <Link href={href} aria-disabled={locked} style={{ pointerEvents: locked ? "none" : "auto" }}>
+    <>
+      <NoHeartsModal isOpen={showNoHeartsModal} />
+      
+      <Link href={href} aria-disabled={!isClickable} style={{ pointerEvents: isClickable ? "auto" : "none" }} onClick={handleClick}>
       <div
         className="relative"
         style={{
@@ -84,8 +118,13 @@ export const LessonButton = ({ id, index, totalCount, locked, current, percentag
                 },
               }}
             >
-              <button className={cn("h-[70px] w-[70px] rounded-full border-2 border-b-[6px] transition-all flex items-center justify-center active:border-b-2", colors.bg, colors.border, colors.hover)}>
-                <Icon className={cn("h-10 w-10 fill-white stroke-white text-white stroke-[4]")} />
+              <button
+                className={cn(
+                  "h-[70px] w-[70px] rounded-full border-2 border-b-[6px] transition-all flex items-center justify-center active:border-b-2",
+                  colors.bg, colors.border, colors.hover
+                )}
+              >
+                <Icon className="h-10 w-10 fill-white stroke-white text-white stroke-3" />
               </button>
             </CircularProgressbarWithChildren>
           </div>
@@ -93,9 +132,9 @@ export const LessonButton = ({ id, index, totalCount, locked, current, percentag
           <button
             className={cn(
               "h-[70px] w-[70px] rounded-full border-2 border-b-[6px] flex items-center justify-center transition-all active:border-b-2",
-              isCompleted || !locked
+              isCompleted
                 ? cn(colors.bg, colors.border, colors.hover)
-                : "bg-gray-200 border-gray-300 cursor-not-allowed opacity-60",
+                : "bg-gray-200 border-gray-300 cursor-not-allowed opacity-60"
             )}
             disabled={locked}
           >
@@ -103,15 +142,14 @@ export const LessonButton = ({ id, index, totalCount, locked, current, percentag
               className={cn(
                 "h-10 w-10",
                 isCompleted
-                  ? "fill-none stroke-white text-white stroke-[4]" // Completed: check with no fill, thick stroke
-                  : !locked
-                  ? "fill-white stroke-white text-white stroke-[3]" // Active: normal icon
-                  : "fill-gray-400 stroke-gray-400 text-gray-400", // Locked: gray icon
+                  ? "fill-none stroke-white text-white stroke-4"
+                  : "fill-gray-400 stroke-gray-400 text-gray-400"
               )}
             />
           </button>
         )}
       </div>
     </Link>
+    </>
   )
 }

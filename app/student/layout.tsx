@@ -14,10 +14,13 @@ export default function StudentLayout({
   
   // Hide sidebar on lesson pages (when URL matches /student/learn/[chapterId]/[levelId])
   const isLessonPage = /^\/student\/learn\/\d+\/\d+/.test(pathname)
+  
+  // Hide sidebar on story pages (when URL matches /student/learn/story/[chapterId])
+  const isStoryPage = /^\/student\/learn\/story\/\d+/.test(pathname)
 
   return (
     <NavigationGuard requiredRole="student">
-      {isLessonPage ? (
+      {isLessonPage || isStoryPage ? (
         <main className="min-h-screen">{children}</main>
       ) : (
         <div className="flex min-h-screen bg-gray-light">

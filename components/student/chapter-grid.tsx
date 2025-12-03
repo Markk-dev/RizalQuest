@@ -10,16 +10,57 @@ export default function ChapterGrid() {
   const [currentLevel, setCurrentLevel] = useState({ chapter: 1, level: 1 })
 
   useEffect(() => {
-    // Load progress from localStorage
-    const saved = localStorage.getItem("completedLevels")
-    if (saved) {
-      setCompletedLevels(new Set(JSON.parse(saved)))
+    // Load progress from database
+    async function loadUserProgress() {
+      try {
+        const { loadProgress } = await import("@/lib/progress-sync")
+        const progress = await loadProgress()
+        
+        if (progress) {
+          // Load from database
+          const completed = progress.completedLevels 
+            ? JSON.parse(progress.completedLevels) 
+            : []
+          setCompletedLevels(new Set(completed))
+          setCurrentLevel({
+            chapter: progress.currentChapter,
+            level: progress.currentLevel,
+          })
+          
+          // Also update localStorage for offline access
+          localStorage.setItem("completedLevels", JSON.stringify(completed))
+          localStorage.setItem("currentLevel", JSON.stringify({
+            chapter: progress.currentChapter,
+            level: progress.currentLevel,
+          }))
+        } else {
+          // Fallback to localStorage
+          const saved = localStorage.getItem("completedLevels")
+          if (saved) {
+            setCompletedLevels(new Set(JSON.parse(saved)))
+          }
+
+          const savedCurrent = localStorage.getItem("currentLevel")
+          if (savedCurrent) {
+            setCurrentLevel(JSON.parse(savedCurrent))
+          }
+        }
+      } catch (error) {
+        console.error("Error loading progress:", error)
+        // Fallback to localStorage
+        const saved = localStorage.getItem("completedLevels")
+        if (saved) {
+          setCompletedLevels(new Set(JSON.parse(saved)))
+        }
+
+        const savedCurrent = localStorage.getItem("currentLevel")
+        if (savedCurrent) {
+          setCurrentLevel(JSON.parse(savedCurrent))
+        }
+      }
     }
 
-    const savedCurrent = localStorage.getItem("currentLevel")
-    if (savedCurrent) {
-      setCurrentLevel(JSON.parse(savedCurrent))
-    }
+    loadUserProgress()
   }, [])
 
   return (
@@ -42,6 +83,14 @@ export default function ChapterGrid() {
               const isCurrent = currentLevel.chapter === chapter.id && currentLevel.level === levelId
               const isLocked = !isCompleted && !isCurrent
 
+              // Calculate how many levels are completed in this chapter
+              const completedInChapter = Array.from({ length: LEVELS_PER_CHAPTER })
+                .filter((_, idx) => completedLevels.has(`${chapter.id}-${idx + 1}`))
+                .length
+
+              // Progress percentage: (completed levels / total levels) * 100
+              const percentage = (completedInChapter / LEVELS_PER_CHAPTER) * 100
+
               return (
                 <LessonButton
                   key={levelKey}
@@ -50,7 +99,7 @@ export default function ChapterGrid() {
                   totalCount={totalLevels}
                   locked={isLocked}
                   current={isCurrent}
-                  percentage={isCompleted ? 100 : isCurrent ? 50 : 0}
+                  percentage={percentage}
                 />
               )
             })}

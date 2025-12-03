@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import NoHeartsModal from "../no-hearts-modal"
 
 interface FillInBlanksProps {
   question: {
@@ -17,12 +18,26 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [answered, setAnswered] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
-  const [hearts, setHearts] = useState(5)
+  const [hearts, setHearts] = useState<number | null>(null)
+  const [showNoHeartsModal, setShowNoHeartsModal] = useState(false)
 
   useEffect(() => {
-    const savedHearts = localStorage.getItem("hearts")
-    if (savedHearts) {
-      setHearts(Number(savedHearts))
+    // Fetch hearts from user object in localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    if (user.$id) {
+      setHearts(user.hearts ?? 5)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Listen for heart updates from other components
+    const handleHeartsUpdated = (event: any) => {
+      setHearts(event.detail.hearts)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+
+    return () => {
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
     }
   }, [])
 
@@ -32,27 +47,64 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const correct = question.blanks.every(
       (blank, idx) => answers[idx]?.toLowerCase().trim() === blank.toLowerCase().trim(),
     )
     setIsCorrect(correct)
     setAnswered(true)
     
-    if (!correct) {
+    if (!correct && hearts !== null) {
       const newHearts = Math.max(0, hearts - 1)
       setHearts(newHearts)
-      localStorage.setItem("hearts", String(newHearts))
+      
+      // Update user object in localStorage
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      user.hearts = newHearts
+      localStorage.setItem("user", JSON.stringify(user))
+      
+      // Sync to database
+      try {
+        await fetch("/api/progress/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.$id,
+            action: "updateHearts",
+            data: { hearts: newHearts }
+          })
+        })
+      } catch (error) {
+        console.error("Failed to sync hearts:", error)
+      }
+      
+      // Dispatch event so other components update
+      window.dispatchEvent(new CustomEvent("heartsUpdated", { detail: { hearts: newHearts } }))
+      
+      // Show modal if no hearts left
+      if (newHearts === 0) {
+        setTimeout(() => {
+          setShowNoHeartsModal(true)
+        }, 2000) // Show modal after 2 seconds
+      }
     }
     
     onAnswer(correct ? 1 : 0)
   }
 
   const handleNext = () => {
-    setAnswers({})
-    setAnswered(false)
-    setIsCorrect(false)
-    onNext()
+    if (isCorrect) {
+      // If correct, move to next question
+      setAnswers({})
+      setAnswered(false)
+      setIsCorrect(false)
+      onNext()
+    } else {
+      // If wrong, just reset to try again
+      setAnswers({})
+      setAnswered(false)
+      setIsCorrect(false)
+    }
   }
 
   const parts = question.question.split("___")
@@ -60,6 +112,8 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
 
   return (
     <>
+      <NoHeartsModal isOpen={showNoHeartsModal} />
+      
       <div className="max-w-4xl mx-auto px-6 pb-32">
         <div className="py-8 mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-black text-left leading-relaxed">
@@ -68,9 +122,9 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
         </div>
 
         <div className="p-8 bg-gray-50 rounded-2xl border-2 border-b-4 border-gray-200">
-          <p className="text-xl text-black leading-relaxed">
+          <div className="text-xl text-black leading-relaxed space-y-4">
             {parts.map((part, idx) => (
-              <span key={idx}>
+              <span key={idx} className="inline-block">
                 {part}
                 {idx < parts.length - 1 && (
                   <input
@@ -90,7 +144,7 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
                 )}
               </span>
             ))}
-          </p>
+          </div>
         </div>
       </div>
 
@@ -126,7 +180,7 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
                 variant="secondary" 
                 size="lg" 
                 onClick={handleNext}
-                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 border-b-4 border-b-red-700 active:border-b-2" : ""}
               >
                 {isCorrect ? "Next" : "Try again"}
               </Button>

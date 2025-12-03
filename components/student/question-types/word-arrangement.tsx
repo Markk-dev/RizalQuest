@@ -19,15 +19,41 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
   const [answered, setAnswered] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState(5)
+  const [shuffledWords, setShuffledWords] = useState<string[]>([])
 
   useEffect(() => {
-    const savedHearts = localStorage.getItem("hearts")
-    if (savedHearts) {
-      setHearts(Number(savedHearts))
+    // Fetch hearts from user object in localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    if (user.$id) {
+      setHearts(user.hearts ?? 5)
     }
   }, [])
 
-  const availableWords = question.words.filter((word) => !selected.includes(word))
+  useEffect(() => {
+    // Listen for heart updates
+    const handleHeartsUpdated = (event: any) => {
+      setHearts(event.detail.hearts)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+
+    return () => {
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Shuffle words when question changes
+    const shuffled = [...question.words]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    setShuffledWords(shuffled)
+    setSelected([])
+    setAnswered(false)
+  }, [question])
+
+  const availableWords = shuffledWords.filter((word) => !selected.includes(word))
 
   const handleSelectWord = (word: string) => {
     if (!answered) {
@@ -41,7 +67,7 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const correct = JSON.stringify(selected) === JSON.stringify(question.correctOrder)
     setIsCorrect(correct)
     setAnswered(true)
@@ -49,17 +75,47 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
     if (!correct) {
       const newHearts = Math.max(0, hearts - 1)
       setHearts(newHearts)
-      localStorage.setItem("hearts", String(newHearts))
+      
+      // Update user object in localStorage
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      user.hearts = newHearts
+      localStorage.setItem("user", JSON.stringify(user))
+      
+      // Sync to database
+      try {
+        await fetch("/api/progress/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.$id,
+            action: "updateHearts",
+            data: { hearts: newHearts }
+          })
+        })
+      } catch (error) {
+        console.error("Failed to sync hearts:", error)
+      }
+      
+      // Dispatch event so other components update
+      window.dispatchEvent(new CustomEvent("heartsUpdated", { detail: { hearts: newHearts } }))
     }
     
     onAnswer(correct ? 1 : 0)
   }
 
   const handleNext = () => {
-    setSelected([])
-    setAnswered(false)
-    setIsCorrect(false)
-    onNext()
+    if (isCorrect) {
+      // If correct, move to next question
+      setSelected([])
+      setAnswered(false)
+      setIsCorrect(false)
+      onNext()
+    } else {
+      // If wrong, just reset to try again
+      setSelected([])
+      setAnswered(false)
+      setIsCorrect(false)
+    }
   }
 
   return (
@@ -141,7 +197,7 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
                 variant="secondary" 
                 size="lg" 
                 onClick={handleNext}
-                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 border-b-4 border-b-red-700 active:border-b-2" : ""}
               >
                 {isCorrect ? "Next" : "Try again"}
               </Button>

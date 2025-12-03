@@ -23,9 +23,22 @@ export default function Classification({ question, onAnswer, onNext }: Classific
   const [selectedItem, setSelectedItem] = useState<string | null>(null)
 
   useEffect(() => {
-    const savedHearts = localStorage.getItem("hearts")
-    if (savedHearts) {
-      setHearts(Number(savedHearts))
+    // Fetch hearts from user object in localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    if (user.$id) {
+      setHearts(user.hearts ?? 5)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Listen for heart updates from other components
+    const handleHeartsUpdated = (event: any) => {
+      setHearts(event.detail.hearts)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+
+    return () => {
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
     }
   }, [])
 
@@ -59,25 +72,58 @@ export default function Classification({ question, onAnswer, onNext }: Classific
     }
   }
 
-  const handleSubmit = () => {
-    const correct = JSON.stringify(classification) === JSON.stringify(question.correctMapping)
+  const handleSubmit = async () => {
+    // Check if all items are correctly classified
+    const correct = question.items.every(item => 
+      classification[item] === question.correctMapping[item]
+    )
     setIsCorrect(correct)
     setAnswered(true)
     
     if (!correct) {
       const newHearts = Math.max(0, hearts - 1)
       setHearts(newHearts)
-      localStorage.setItem("hearts", String(newHearts))
+      
+      // Update user object in localStorage
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      user.hearts = newHearts
+      localStorage.setItem("user", JSON.stringify(user))
+      
+      // Sync to database
+      try {
+        await fetch("/api/progress/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.$id,
+            action: "updateHearts",
+            data: { hearts: newHearts }
+          })
+        })
+      } catch (error) {
+        console.error("Failed to sync hearts:", error)
+      }
+      
+      // Dispatch event so other components update
+      window.dispatchEvent(new CustomEvent("heartsUpdated", { detail: { hearts: newHearts } }))
     }
     
     onAnswer(correct ? 1 : 0)
   }
 
   const handleNext = () => {
-    setClassification({})
-    setAnswered(false)
-    setIsCorrect(false)
-    onNext()
+    if (isCorrect) {
+      // If correct, move to next question
+      setClassification({})
+      setAnswered(false)
+      setIsCorrect(false)
+      onNext()
+    } else {
+      // If wrong, just reset to try again
+      setClassification({})
+      setAnswered(false)
+      setIsCorrect(false)
+    }
   }
 
   const getCategoryColor = (index: number) => {

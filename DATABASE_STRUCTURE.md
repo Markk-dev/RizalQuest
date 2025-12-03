@@ -14,6 +14,7 @@ Stores user account information and basic stats.
 | hearts | integer | No | Current hearts (0-10, default: 5) |
 | xp | integer | No | Total experience points (default: 0) |
 | completedLevels | string(5000) | No | JSON string of completed levels |
+| lastHeartUpdate | datetime | No | Timestamp of last heart update for regeneration |
 
 **Indexes:**
 - `username_unique` - Unique index on username

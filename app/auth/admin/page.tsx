@@ -18,17 +18,31 @@ export default function AdminAuthPage() {
     setLoading(true)
 
     try {
-      // TODO: Implement actual admin authentication with Appwrite
-      // For now, simple check
-      if (username && password) {
-        localStorage.setItem("user", JSON.stringify({ username, role: "admin" }))
-        localStorage.setItem("userRole", "admin")
-        router.push("/admin")
-      } else {
-        setError("Please enter username and password")
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed")
       }
-    } catch (err) {
-      setError("Login failed. Please check your credentials.")
+
+      // Check if user is admin
+      if (data.user.role !== "admin") {
+        throw new Error("Access denied. Admin credentials required.")
+      }
+
+      // Store user data
+      localStorage.setItem("user", JSON.stringify(data.user))
+      localStorage.setItem("userId", data.user.$id)
+      localStorage.setItem("userRole", data.user.role)
+      
+      router.push("/admin")
+    } catch (err: any) {
+      setError(err.message || "Login failed. Please check your credentials.")
     } finally {
       setLoading(false)
     }

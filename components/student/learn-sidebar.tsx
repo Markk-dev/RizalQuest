@@ -4,21 +4,79 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Zap } from "lucide-react"
+import { startHeartRegeneration, formatTimeUntilNextHeart } from "@/lib/heart-regeneration"
 
 export default function LearnSidebar() {
   const [hearts, setHearts] = useState(5)
   const [xp, setXp] = useState(0)
+  const [timeUntilNext, setTimeUntilNext] = useState("")
 
   useEffect(() => {
-    // Load from localStorage
-    const savedHearts = localStorage.getItem("hearts")
-    if (savedHearts) {
-      setHearts(Number(savedHearts))
+    // Load initial data and fetch fresh from server
+    async function initializeData() {
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      
+      if (user.$id) {
+        // Fetch fresh data from server
+        try {
+          const response = await fetch(`/api/user/hearts?userId=${user.$id}`)
+          if (response.ok) {
+            const data = await response.json()
+            user.hearts = data.hearts
+            user.lastHeartUpdate = data.lastHeartUpdate
+            localStorage.setItem("user", JSON.stringify(user))
+            setHearts(data.hearts)
+          } else {
+            // Fallback to localStorage
+            setHearts(user.hearts ?? 5)
+          }
+        } catch (error) {
+          console.error("Error fetching hearts:", error)
+          setHearts(user.hearts ?? 5)
+        }
+      } else {
+        setHearts(user.hearts ?? 5)
+      }
+      
+      setXp(user.xp || 0)
+      setTimeUntilNext(formatTimeUntilNextHeart())
     }
 
-    const savedXP = localStorage.getItem("xp")
-    if (savedXP) {
-      setXp(Number(savedXP))
+    initializeData()
+
+    // Start heart regeneration
+    const regenInterval = startHeartRegeneration()
+
+    // Update timer every second
+    const timerInterval = setInterval(() => {
+      setTimeUntilNext(formatTimeUntilNextHeart())
+    }, 1000)
+
+    // Listen for heart updates
+    const handleHeartsUpdated = (event: any) => {
+      setHearts(event.detail.hearts)
+    }
+    window.addEventListener("heartsUpdated", handleHeartsUpdated)
+
+    // Listen for XP updates
+    const handleXPUpdated = (event: any) => {
+      setXp(event.detail.xp)
+    }
+    window.addEventListener("xpUpdated", handleXPUpdated)
+
+    const handleStorageChange = () => {
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      setHearts(user.hearts || 5)
+      setXp(user.xp || 0)
+    }
+    window.addEventListener("storage", handleStorageChange)
+
+    return () => {
+      clearInterval(regenInterval)
+      clearInterval(timerInterval)
+      window.removeEventListener("heartsUpdated", handleHeartsUpdated)
+      window.removeEventListener("xpUpdated", handleXPUpdated)
+      window.removeEventListener("storage", handleStorageChange)
     }
   }, [])
 
@@ -40,9 +98,14 @@ export default function LearnSidebar() {
           </div>
 
           {/* Hearts */}
-          <div className="flex items-center gap-2">
-            <Image src="/heart.svg" alt="Hearts" width={28} height={28} />
-            <span className="text-xl font-bold text-rose-500">{hearts}</span>
+          <div className="flex flex-col items-end">
+            <div className="flex items-center gap-2">
+              <Image src="/heart.svg" alt="Hearts" width={28} height={28} />
+              <span className="text-xl font-bold text-rose-500">{hearts}</span>
+            </div>
+            {hearts < 5 && timeUntilNext && (
+              <span className="text-xs text-gray-500 mt-1">+1 in {timeUntilNext}</span>
+            )}
           </div>
         </div>
       </div>
