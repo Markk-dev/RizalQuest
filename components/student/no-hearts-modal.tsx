@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
@@ -10,6 +11,19 @@ interface NoHeartsModalProps {
 
 export default function NoHeartsModal({ isOpen }: NoHeartsModalProps) {
   const router = useRouter()
+
+  useEffect(() => {
+    if (isOpen) {
+      // Play no hearts modal sound when modal opens
+      try {
+        const modalAudio = new Audio('/sounds/no_heart_modal.ogg')
+        modalAudio.volume = 0.5
+        modalAudio.play().catch((err) => console.error('No hearts modal audio play failed:', err))
+      } catch (error) {
+        console.error('No hearts modal audio error:', error)
+      }
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 

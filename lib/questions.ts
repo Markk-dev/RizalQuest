@@ -58,9 +58,8 @@ export const QUESTION_BANK = {
       {
         type: "word-arrangement",
         question: "Arrange these words:",
-        words: ["Got", "Burned", "To", "Moth", "And", "Flame", "Flew", "Close", "That", "Too"],
-        correctOrder: ["The", "Moth", "That", "Flew", "Too", "Close", "To", "The", "Flame", "And", "Got", "Burned"],
-        prefilledWords: ["The"]
+        words: ["The", "Moth", "That", "Flew", "Too", "Close", "To", "The", "Flame", "And", "Got", "Burned"],
+        correctOrder: ["The", "Moth", "That", "Flew", "Too", "Close", "To", "The", "Flame", "And", "Got", "Burned"]
       },
     ],
     3: [

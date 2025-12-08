@@ -45,7 +45,14 @@ export default function MultiInputTyping({ question, onAnswer, onNext }: MultiIn
     return str.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   }
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSubmit = async () => {
+    playButtonSound()
     const validAnswers = question.correctAnswers.split(",").map(ans => normalizeString(ans.trim()))
     const normalizedInputs = inputs.map(inp => normalizeString(inp))
     
@@ -65,6 +72,15 @@ export default function MultiInputTyping({ question, onAnswer, onNext }: MultiIn
       setWrongAttempts(newWrongAttempts)
       
       if (newWrongAttempts >= 3) {
+        // Play toast sound immediately
+        try {
+          const toastAudio = new Audio('/sounds/toast.ogg')
+          toastAudio.volume = 0.5
+          toastAudio.play().catch((err) => console.error('Toast audio play failed:', err))
+        } catch (error) {
+          console.error('Toast audio error:', error)
+        }
+        
         toast("Try recalling the story", {
           duration: 5000,
           icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
@@ -115,6 +131,7 @@ export default function MultiInputTyping({ question, onAnswer, onNext }: MultiIn
   }
 
   const handleNext = () => {
+    playButtonSound()
     if (isCorrect) {
       setInputs(Array(question.inputCount).fill(""))
       setAnswered(false)

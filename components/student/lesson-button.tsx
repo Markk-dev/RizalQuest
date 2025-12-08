@@ -79,10 +79,21 @@ export const LessonButton = ({ id, index, totalCount, locked, current, percentag
 
   const colors = chapterColors[chapterId as keyof typeof chapterColors] || chapterColors[1]
   
+  const playClickSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch(err => console.log('Audio play failed:', err))
+  }
+  
   const handleClick = (e: React.MouseEvent) => {
     if (!hasHearts && !locked) {
       e.preventDefault()
       setShowNoHeartsModal(true)
+      return
+    }
+    
+    if (isClickable) {
+      playClickSound()
     }
   }
 

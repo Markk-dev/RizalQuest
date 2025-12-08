@@ -36,8 +36,15 @@ export default function MultipleChoice({ question, options, correct, multipleCor
     setAnswered(false)
   }, [options, question])
 
+  const playTileSound = () => {
+    const audio = new Audio('/sounds/tile_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSelect = (index: number) => {
     if (!answered) {
+      playTileSound()
       if (multipleCorrect) {
         // Toggle selection for multiple correct answers
         const originalIndex = shuffledOptions[index].originalIndex

@@ -46,7 +46,14 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
     }
   }, [])
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSubmit = async () => {
+    playButtonSound()
     // Normalize both strings: remove accents, lowercase, trim
     const normalizeString = (str: string) => {
       return str
@@ -103,6 +110,15 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
       
       // Show hint after 3 wrong attempts (and keep showing on subsequent failures)
       if (newWrongAttempts >= 3) {
+        // Play toast sound
+        try {
+          const toastAudio = new Audio('/sounds/toast.ogg')
+          toastAudio.volume = 0.5
+          toastAudio.play().catch((err) => console.error('Toast audio play failed:', err))
+        } catch (error) {
+          console.error('Toast audio error:', error)
+        }
+        
         toast("Try recalling the story", {
           duration: 5000,
           icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
@@ -160,6 +176,7 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
   }
 
   const handleNext = () => {
+    playButtonSound()
     if (isCorrect) {
       // If correct, move to next question and reset wrong attempts
       setInput("")

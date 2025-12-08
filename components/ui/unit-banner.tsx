@@ -44,6 +44,19 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
 
   const colors = chapterColors[chapterId as keyof typeof chapterColors] || chapterColors[1];
 
+  const playStorySound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch(err => console.log('Audio play failed:', err))
+  }
+
+  const handleReadClick = () => {
+    if (isUnlocked) {
+      playStorySound()
+      router.push(`/student/learn/story/${chapterId}`)
+    }
+  }
+
   return (
     <div className={cn("flex w-full items-center justify-between rounded-xl p-5 text-white", colors.bg)}>
       <div className="space-y-2.5">
@@ -54,7 +67,7 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
       <Button
         size="lg"
         variant="secondary"
-        onClick={() => isUnlocked && router.push(`/student/learn/story/${chapterId}`)}
+        onClick={handleReadClick}
         disabled={!isUnlocked}
         className={cn(
           "hidden border-2 border-b-4 active:border-b-2 xl:flex text-white",

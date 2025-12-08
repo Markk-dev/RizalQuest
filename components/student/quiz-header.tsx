@@ -12,7 +12,14 @@ interface QuizHeaderProps {
 export default function QuizHeader({ hearts, progress }: QuizHeaderProps) {
   const router = useRouter()
 
+  const playExitSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleExit = () => {
+    playExitSound()
     router.push("/student/learn")
   }
 

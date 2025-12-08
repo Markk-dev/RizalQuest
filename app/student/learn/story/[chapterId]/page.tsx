@@ -96,7 +96,14 @@ export default function StoryPage() {
   const pages = splitStoryIntoPages(chapterData.story)
   const totalPages = 3
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleNext = () => {
+    playButtonSound()
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1)
     } else {
@@ -105,12 +112,14 @@ export default function StoryPage() {
   }
 
   const handlePrevious = () => {
+    playButtonSound()
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1)
     }
   }
 
   const handleClose = () => {
+    playButtonSound()
     router.push("/student/learn")
   }
 

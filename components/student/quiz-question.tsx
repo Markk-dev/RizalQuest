@@ -70,8 +70,21 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
     }
   }, [])
 
+  const playTileSound = () => {
+    const audio = new Audio('/sounds/tile_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSelect = (index: number) => {
     if (!isAnswered) {
+      playTileSound()
       if (multipleCorrect) {
         // Toggle selection for multiple correct answers
         if (selectedIndices.includes(index)) {
@@ -86,6 +99,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
   }
 
   const handleCheck = async () => {
+    playButtonSound()
     if (hearts !== null && (multipleCorrect ? selectedIndices.length > 0 : selectedIndex !== null)) {
       let correct = false
       let answerResult: number | number[]
@@ -119,6 +133,15 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
         
         // Show hint after 3 wrong attempts (and keep showing on subsequent failures)
         if (newWrongAttempts >= 3) {
+          // Play toast sound
+          try {
+            const toastAudio = new Audio('/sounds/toast.ogg')
+            toastAudio.volume = 0.5
+            toastAudio.play().catch((err) => console.error('Toast audio play failed:', err))
+          } catch (error) {
+            console.error('Toast audio error:', error)
+          }
+          
           toast("Try recalling the story", {
             duration: 5000,
             icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
@@ -207,6 +230,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
   }
 
   const handleNextClick = () => {
+    playButtonSound()
     if (isCorrect) {
       // If correct, move to next question and reset wrong attempts
       setSelectedIndex(null)

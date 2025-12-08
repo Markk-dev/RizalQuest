@@ -53,8 +53,16 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
     setAnswered(false)
   }, [question])
 
+  const playTileSound = () => {
+    const audio = new Audio('/sounds/tile_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleTap = (rightItem: string) => {
     if (answered) return
+    
+    playTileSound()
     
     // If already selected, remove it (redo)
     if (selectedOrder.includes(rightItem)) {
@@ -65,7 +73,14 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
     }
   }
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSubmit = async () => {
+    playButtonSound()
     // Check if user's order matches the correct order
     const correct = question.pairs.every((pair, index) => selectedOrder[index] === pair.right)
     setIsCorrect(correct)
@@ -76,6 +91,15 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
       setWrongAttempts(newWrongAttempts)
       
       if (newWrongAttempts >= 3) {
+        // Play toast sound
+        try {
+          const toastAudio = new Audio('/sounds/toast.ogg')
+          toastAudio.volume = 0.5
+          toastAudio.play().catch((err) => console.error('Toast audio play failed:', err))
+        } catch (error) {
+          console.error('Toast audio error:', error)
+        }
+        
         toast("Try recalling the story", {
           duration: 5000,
           icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
@@ -126,6 +150,7 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
   }
 
   const handleNext = () => {
+    playButtonSound()
     if (isCorrect) {
       setSelectedOrder([])
       setAnswered(false)

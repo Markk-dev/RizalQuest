@@ -15,7 +15,14 @@ export default function StudentSidebar() {
   const pathname = usePathname()
   const router = useRouter()
 
+  const playClickSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Click sound failed:', err))
+  }
+
   const handleLogout = () => {
+    playClickSound()
     localStorage.removeItem("userRole")
     router.push("/")
   }
@@ -41,6 +48,7 @@ export default function StudentSidebar() {
           return (
             <Link key={item.href} href={item.href}>
               <button
+                onClick={playClickSound}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive ? "bg-primary text-white font-semibold shadow-md" : "text-gray-dark hover:bg-gray-light"
                 }`}

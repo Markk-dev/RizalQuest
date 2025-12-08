@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { CHAPTERS, LEVELS_PER_CHAPTER } from "@/lib/constants"
 import { LessonButton } from "./lesson-button"
 import { UnitBanner } from "@/components/ui/unit-banner"
+import { MapCharacter } from "@/components/ui/map-character"
 
 export default function ChapterGrid() {
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set())
@@ -92,6 +93,110 @@ export default function ChapterGrid() {
 
           {/* Vertical winding path with lesson buttons */}
           <div className="relative w-full flex flex-col items-center gap-2">
+            {/* Character for Chapter 1 */}
+            {chapter.id === 1 && (
+              <MapCharacter 
+                characterSrc="/characters/Char02_cheer.png"
+                 hoverSrc="/characters/Char02_idle.png"
+                position={{ right: "16", top: "300px" }}
+                shadowConfig={{ 
+                    blur: "5px"
+                  }}
+              />
+            )}
+            
+            {/* Characters for Chapter 2 */}
+            {chapter.id === 2 && (
+              <>
+                <MapCharacter 
+                  characterSrc="/characters/Char01_idle.png"
+                  position={{ left: "0", top: "10px" }}
+                  hoverSrc="/characters/Char01_interact.png"
+                   shadowConfig={{ 
+                    top: "top-40.5",
+                    width: "w-25",
+                    height: "h-8",
+                    blur: "2px"
+                  }}
+                />
+                <MapCharacter 
+                  characterSrc="/characters/Char02_thinking.png"
+                  position={{ right: "20", top: "220px" }}
+                  shadowConfig={{ 
+                    top: "top-40.5",
+                    width: "w-25",
+                    height: "h-8",
+                    blur: "2px"
+                  }}
+                />
+              </>
+            )}
+            
+            {/* Character for Chapter 3 */}
+            {chapter.id === 3 && (
+              <MapCharacter 
+                characterSrc="/characters/Female_shove.png"
+                hoverSrc="/characters/Female_idle.png"
+                position={{ right: "35", top: "230px" }}
+                 shadowConfig={{ 
+                    top: "top-40.5",
+                    width: "w-25",
+                    height: "h-8",
+                    blur: "3px"
+                  }}
+              /> 
+            )}
+            
+            {/* Characters for Chapter 4 */}
+            {chapter.id === 4 && (
+              <>
+                <MapCharacter 
+                  characterSrc="/characters/Char02_switch0.png"
+                  hoverSrc="/characters/Char02_switch1.png"
+                  position={{ left: "8", top: "120px" }}
+                />
+              </>
+            )}
+            
+            {/* Character for Chapter 5 */}
+            {chapter.id === 5 && (
+              <MapCharacter 
+                characterSrc="/characters/Female_thinking.png"
+                position={{ left: "12", top: "350px" }}
+              />
+            )}
+            
+            {/* Character for Chapter 6 */}
+            {chapter.id === 6 && (
+              <MapCharacter 
+                characterSrc="/characters/Char01_cheer.png"
+                position={{ right: "16", top: "270px" }}
+                hoverSrc="/characters/Char01_idle.png"
+              />
+            )}
+            
+            {/* Character for Chapter 7 */}
+            {chapter.id === 7 && (
+              <MapCharacter 
+                characterSrc="/characters/Char02_hold.png"
+                position={{ left: "10", top: "50px" }}
+              />
+            )}
+            
+            {/* Characters for Chapter 8 */}
+            {chapter.id === 8 && (
+              <>
+                <MapCharacter 
+                  characterSrc="/characters/Char01_shove.png"
+                  position={{ left: "15", top: "50px" }}
+                />
+                <MapCharacter 
+                  characterSrc="/characters/Char02_thinking.png"
+                  position={{ right: "15", top: "400px" }}
+                />
+              </>
+            )}
+            
             {Array.from({ length: LEVELS_PER_CHAPTER }).map((_, levelIndex) => {
               const levelId = levelIndex + 1
               const totalLevels = LEVELS_PER_CHAPTER

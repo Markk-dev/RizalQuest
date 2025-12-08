@@ -21,6 +21,7 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState(5)
   const [shuffledWords, setShuffledWords] = useState<string[]>([])
+  const [usedIndices, setUsedIndices] = useState<number[]>([])
 
   useEffect(() => {
     // Fetch hearts from user object in localStorage
@@ -52,14 +53,21 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
     setShuffledWords(shuffled)
     // Set prefilled words if provided
     setSelected(question.prefilledWords || [])
+    setUsedIndices([])
     setAnswered(false)
   }, [question])
 
-  const availableWords = shuffledWords.filter((word) => !selected.includes(word))
+  const playTileSound = () => {
+    const audio = new Audio('/sounds/tile_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
 
-  const handleSelectWord = (word: string) => {
+  const handleSelectWord = (word: string, index: number) => {
     if (!answered) {
+      playTileSound()
       setSelected([...selected, word])
+      setUsedIndices([...usedIndices, index])
     }
   }
 
@@ -69,11 +77,21 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
       const prefilledCount = question.prefilledWords?.length || 0
       if (idx < prefilledCount) return
       
+      playTileSound()
+      const removedWordIndex = usedIndices[idx]
       setSelected(selected.filter((_, i) => i !== idx))
+      setUsedIndices(usedIndices.filter((_, i) => i !== idx))
     }
   }
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const handleSubmit = async () => {
+    playButtonSound()
     const correct = JSON.stringify(selected) === JSON.stringify(question.correctOrder)
     setIsCorrect(correct)
     setAnswered(true)
@@ -110,15 +128,18 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
   }
 
   const handleNext = () => {
+    playButtonSound()
     if (isCorrect) {
       // If correct, move to next question
       setSelected(question.prefilledWords || [])
+      setUsedIndices([])
       setAnswered(false)
       setIsCorrect(false)
       onNext()
     } else {
       // If wrong, just reset to try again but keep prefilled words
       setSelected(question.prefilledWords || [])
+      setUsedIndices([])
       setAnswered(false)
       setIsCorrect(false)
     }
@@ -166,16 +187,21 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
         <div>
           <p className="text-sm text-gray-600 mb-4 font-semibold">Available words:</p>
           <div className="flex flex-wrap gap-3">
-            {availableWords.map((word, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSelectWord(word)}
-                disabled={answered}
-                className="px-5 py-3 rounded-xl border-2 border-b-4 border-gray-300 bg-white text-black font-semibold text-lg hover:border-green-500 hover:bg-gray-50 transition-all active:border-b-2"
-              >
-                {word}
-              </button>
-            ))}
+            {shuffledWords.map((word, idx) => {
+              const isUsed = usedIndices.includes(idx)
+              if (isUsed) return null
+              
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleSelectWord(word, idx)}
+                  disabled={answered}
+                  className="px-5 py-3 rounded-xl border-2 border-b-4 border-gray-300 bg-white text-black font-semibold text-lg hover:border-green-500 hover:bg-gray-50 transition-all active:border-b-2"
+                >
+                  {word}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
