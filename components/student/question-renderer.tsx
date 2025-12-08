@@ -2,6 +2,7 @@
 
 import QuizQuestion from "./quiz-question"
 import TypingQuestion from "./question-types/typing"
+import MultiInputTypingQuestion from "./question-types/multi-input-typing"
 import ClassificationQuestion from "./question-types/classification"
 import FillInBlanksQuestion from "./question-types/fill-in-blanks"
 import WordArrangementQuestion from "./question-types/word-arrangement"
@@ -20,6 +21,9 @@ export default function QuestionRenderer({ question, onAnswer, onNext }: Questio
     
     case "typing":
       return <TypingQuestion question={question} onAnswer={onAnswer} onNext={onNext} />
+    
+    case "multi-input-typing":
+      return <MultiInputTypingQuestion question={question} onAnswer={onAnswer} onNext={onNext} />
     
     case "classification":
       return <ClassificationQuestion question={question} onAnswer={onAnswer} onNext={onNext} />

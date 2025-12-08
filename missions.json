@@ -1,0 +1,70 @@
+{
+  "dailyMissions": [
+    {
+      "id": "spend_50_xp",
+      "title": "Spend 50 XP",
+      "description": "Use 50 XP in the shop",
+      "reward": 1,
+      "type": "spend_xp",
+      "target": 50
+    },
+    {
+      "id": "complete_3_levels",
+      "title": "Complete 3 levels",
+      "description": "Finish 3 levels",
+      "reward": 1,
+      "type": "levels",
+      "target": 3
+    },
+    {
+      "id": "complete_5_levels",
+      "title": "Complete 5 levels",
+      "description": "Finish 5 levels",
+      "reward": 1,
+      "type": "levels",
+      "target": 5
+    },
+    {
+      "id": "earn_20_xp",
+      "title": "Earn 20 XP",
+      "description": "Collect 20 XP",
+      "reward": 1,
+      "type": "xp",
+      "target": 20
+    },
+    {
+      "id": "earn_40_xp",
+      "title": "Earn 40 XP",
+      "description": "Collect 40 XP",
+      "reward": 1,
+      "type": "xp",
+      "target": 40
+    },
+    {
+      "id": "earn_60_xp",
+      "title": "Earn 60 XP",
+      "description": "Collect 60 XP",
+      "reward": 1,
+      "type": "xp",
+      "target": 60
+    },
+    {
+      "id": "perfect_level",
+      "title": "Perfect level",
+      "description": "Complete a level without losing hearts",
+      "reward": 1,
+      "type": "perfect",
+      "target": 1
+    },
+    {
+      "id": "complete_chapter",
+      "title": "Complete a chapter",
+      "description": "Finish all 5 levels in any chapter",
+      "reward": 2,
+      "type": "chapter",
+      "target": 1
+    }
+  ]
+}
+
+

@@ -99,6 +99,10 @@ export default function LessonPage() {
       const levelKey = `${chapterId}-${levelId}`
       const saved = localStorage.getItem("completedLevels")
       const completed = saved ? new Set(JSON.parse(saved)) : new Set()
+      
+      // Check if this is the first time completing this level
+      const isFirstTimeCompletion = !completed.has(levelKey)
+      
       completed.add(levelKey)
       localStorage.setItem("completedLevels", JSON.stringify([...completed]))
 
@@ -108,8 +112,8 @@ export default function LessonPage() {
       // Check if this completes the platform (all 5 levels)
       const isLastLevel = levelId >= 5
       
-      // Award XP only when completing all 5 levels (completing the platform)
-      if (isLastLevel) {
+      // Award XP only when completing all 5 levels for the FIRST TIME (prevent XP farming)
+      if (isLastLevel && isFirstTimeCompletion) {
         const user = JSON.parse(localStorage.getItem("user") || "{}")
         const newXP = (user.xp || 0) + 20 // 20 XP per platform (5 levels)
         user.xp = newXP

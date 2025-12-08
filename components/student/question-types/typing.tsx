@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import NoHeartsModal from "../no-hearts-modal"
+import { toast } from "sonner"
+import { Info } from "lucide-react"
 
 interface TypingProps {
   question: {
     type: string
     question: string
     correctAnswer: string
+    acceptedAnswers?: string[]
     placeholder?: string
   }
   onAnswer: (result: any) => void
@@ -21,6 +24,7 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState<number | null>(null)
   const [showNoHeartsModal, setShowNoHeartsModal] = useState(false)
+  const [wrongAttempts, setWrongAttempts] = useState(0)
 
   useEffect(() => {
     // Fetch hearts from user object in localStorage
@@ -43,11 +47,81 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
   }, [])
 
   const handleSubmit = async () => {
-    const correct = input.toLowerCase().trim() === question.correctAnswer.toLowerCase().trim()
+    // Normalize both strings: remove accents, lowercase, trim
+    const normalizeString = (str: string) => {
+      return str
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    }
+    
+    const normalizedInput = normalizeString(input)
+    const normalizedAnswer = normalizeString(question.correctAnswer)
+    
+    // Check for exact match first
+    let correct = normalizedInput === normalizedAnswer
+    
+    // Check acceptedAnswers array if provided
+    if (!correct && question.acceptedAnswers) {
+      correct = question.acceptedAnswers.some(ans => normalizeString(ans) === normalizedInput)
+    }
+    
+    // Special case: Accept both "protasio" and "protacio" for Rizal's full name
+    if (!correct && normalizedInput.includes("protacio")) {
+      const inputVariant = normalizedInput.replace(/protacio/g, "protasio")
+      correct = inputVariant === normalizedAnswer
+    }
+    
+    // Special case: Accept variations for "The moth and the flame" story
+    if (!correct && normalizedAnswer.includes("moth")) {
+      const mothVariations = [
+        "the moth and the flame",
+        "the moth story",
+        "moth story",
+        "the moth that flew too close to the flame and got burned",
+        "moth that flew too close to the flame and got burned",
+        "moth and flame",
+        "the moth and flame"
+      ]
+      correct = mothVariations.some(variation => normalizeString(variation) === normalizedInput)
+    }
+    
+    // Special case: Accept any of the comma-separated values (for siblings question)
+    if (!correct && normalizedAnswer.includes(",")) {
+      const validAnswers = normalizedAnswer.split(",").map(ans => ans.trim())
+      correct = validAnswers.some(validAns => validAns === normalizedInput)
+    }
+    
     setIsCorrect(correct)
     setAnswered(true)
     
     if (!correct && hearts !== null) {
+      // Increment wrong attempts
+      const newWrongAttempts = wrongAttempts + 1
+      setWrongAttempts(newWrongAttempts)
+      
+      // Show hint after 3 wrong attempts (and keep showing on subsequent failures)
+      if (newWrongAttempts >= 3) {
+        toast("Try recalling the story", {
+          duration: 5000,
+          icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
+          style: {
+            background: '#fef3c7',
+            color: '#78350f',
+            border: '2px solid #fbbf24',
+            borderBottom: '4px solid #f59e0b',
+            fontSize: '14px',
+            fontWeight: '500',
+            padding: '10px 14px',
+            maxWidth: '320px',
+            borderRadius: '10px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          },
+          className: 'toast-hint',
+        })
+      }
+      
       const newHearts = Math.max(0, hearts - 1)
       setHearts(newHearts)
       
@@ -87,10 +161,11 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
 
   const handleNext = () => {
     if (isCorrect) {
-      // If correct, move to next question
+      // If correct, move to next question and reset wrong attempts
       setInput("")
       setAnswered(false)
       setIsCorrect(false)
+      setWrongAttempts(0)
       onNext()
     } else {
       // If wrong, just reset to try again

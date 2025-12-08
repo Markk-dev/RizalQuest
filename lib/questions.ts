@@ -58,8 +58,9 @@ export const QUESTION_BANK = {
       {
         type: "word-arrangement",
         question: "Arrange these words:",
-        words: ["School", "life", "prepared", "Rizal"],
-        correctOrder: ["School", "life", "prepared", "Rizal"],
+        words: ["Got", "Burned", "To", "Moth", "And", "Flame", "Flew", "Close", "That", "Too"],
+        correctOrder: ["The", "Moth", "That", "Flew", "Too", "Close", "To", "The", "Flame", "And", "Got", "Burned"],
+        prefilledWords: ["The"]
       },
     ],
     3: [
@@ -93,29 +94,23 @@ export const QUESTION_BANK = {
         correct: 1,
       },
       {
-        type: "multiple-choice",
-        question: "Young Rizal showed talent in:",
-        options: ["Fighting", "Art and writing", "Cooking", "Dancing"],
-        correct: 1,
+        type: "typing",
+        question: "What is Rizal's mother's name?",
+        correctAnswer: "Teodora",
       },
     ],
     4: [
       {
-        type: "multiple-choice",
-        question: "What values did Rizal's parents teach him?",
-        options: ["Laziness", "Good manners and respect", "Fighting", "Stealing"],
-        correct: 1,
+        type: "multi-input-typing",
+        question: "Name at least 2 of Rizal's siblings (first name only):",
+        correctAnswers: "Saturnina,Paciano,Narcisa,Olympia,Lucia,Maria,Concepcion,Josefa,Trinidad,Soledad",
+        inputCount: 2,
+        placeholder: "Type a sibling's name..."
       },
       {
         type: "multiple-choice",
         question: "What did Pepe love doing as a child?",
-        options: ["Cooking", "Arts and Reading", "Farming", "Sewing"],
-        correct: 1,
-      },
-      {
-        type: "multiple-choice",
-        question: "How old was Pepe when he learned the alphabet?",
-        options: ["2 years old", "3 years old", "5 years old", "7 years old"],
+        options: ["Cooking", "Making clay figures", "Farming", "Sewing"],
         correct: 1,
       },
       {
@@ -162,59 +157,63 @@ export const QUESTION_BANK = {
     1: [
       {
         type: "matching",
-        question: "Match Rizal's subjects with their descriptions:",
+        question: "Match Rizal's student years descriptions:",
         pairs: [
-          { left: "Spanish", right: "Language he learned" },
-          { left: "Science", right: "Study of nature" },
-          { left: "Math", right: "Numbers and calculations" }
+          { left: "First studied at?", right: "Ateneo" },
+          { left: "sobresaliente", right: "excellent" },
+          { left: "poem for youth", right: "Hope of the fatherland" }
         ]
       },
       {
         type: "multiple-choice",
-        question: "Where did Rizal study?",
-        options: ["One school only", "Different schools", "At home", "Abroad only"],
+        question: "What did Pepe want to become to help his mother?",
+        options: ["Teacher", "Eye doctor", "Farmer", "Painter"],
         correct: 1,
       },
       {
         type: "typing",
-        question: "How did Rizal approach his studies?",
-        correctAnswer: "hard",
+        question: "Who ran the University of Santo Tomas?",
+        correctAnswer: "Dominican priests",
+        acceptedAnswers: ["Dominican priests", "Dominicans", "dominican priests", "dominicans", "Dominican priest", "dominican priest", "Dominican", "dominican"]
       },
       {
         type: "multiple-choice",
         question: "What subjects did Rizal learn?",
-        options: ["Only math", "Spanish, science, math and more", "Only art", "Only history"],
-        correct: 1,
+        options: ["Science", "Spanish", "Math", "Law"],
+        correct: [0, 1, 2], // Accept A, B, and C (all except D)
+        multipleCorrect: true
       },
       {
         type: "word-arrangement",
         question: "Arrange the words:",
-        words: ["Rizal", "was", "an", "excellent", "student"],
-        correctOrder: ["Rizal", "was", "an", "excellent", "student"],
+        words: ["Fatherland", "Of", "The", "Hope"],
+        correctOrder: ["Hope", "Of", "The", "Fatherland"],
       },
     ],
     2: [
       {
         type: "multiple-choice",
-        question: "How did Rizal work in his lessons?",
-        options: ["Lazily", "Hard", "Slowly", "Never"],
-        correct: 1,
+        question: "Why did Rizal study medicine?",
+        options: ["To help his mother", "study science", "To work in a hospital", "followed brothers advice"],
+        correct: 0,
       },
       {
         type: "typing",
-        question: "What did teachers think of Rizal?",
-        correctAnswer: "respectful",
+        question: "What did Rizal loved writing?",
+        correctAnswer: "poems",
+        acceptedAnswers: ["poems", "poem", "Poems", "Poem"]
       },
       {
         type: "multiple-choice",
         question: "Rizal was known for being:",
-        options: ["Lazy", "Disciplined and polite", "Rude", "Careless"],
+        options: ["Lazy", "Disciplined", "Rude", "Careless"],
         correct: 1,
       },
       {
-        type: "fill-in-blanks",
-        question: "Rizal studied ___ and ___.",
-        blanks: ["hard", "well"],
+        type: "typing",
+        question: "Who ran the Ateneo?",
+        correctAnswer: "Jesuit priests",
+        acceptedAnswers: ["Jesuit priests", "Jesuit priest", "Jesuits", "Jesuit", "jesuit priests", "jesuit priest", "jesuits", "jesuit"]
       },
       {
         type: "multiple-choice",
@@ -226,13 +225,14 @@ export const QUESTION_BANK = {
     3: [
       {
         type: "typing",
-        question: "What passion did Rizal discover? (Type one word)",
-        correctAnswer: "writing",
+        question: "What language did Rizal learn as a subject in school?",
+        correctAnswer: "Spanish",
+        acceptedAnswers: ["Spanish", "spanish"]
       },
       {
         type: "multiple-choice",
         question: "Rizal excelled in:",
-        options: ["Sports only", "Academic subjects", "Music only", "Nothing"],
+        options: ["Sports", "Academics", "Music", "Law"],
         correct: 1,
       },
       {
@@ -248,24 +248,18 @@ export const QUESTION_BANK = {
         }
       },
       {
-        type: "multiple-choice",
-        question: "What language did Rizal master?",
-        options: ["English", "Spanish", "French", "German"],
-        correct: 1,
-      },
-      {
         type: "word-arrangement",
-        question: "Arrange:",
-        words: ["Rizal", "loved", "to", "learn"],
-        correctOrder: ["Rizal", "loved", "to", "learn"],
+        question: "Arrange Pepe's fullname:",
+        words: ["Rizal", "Protasio", "Y", "Alonso", "Realonda", "Jose", "Mercado"],
+        correctOrder: ["Jose", "Protasio", "Rizal", "Mercado", "Y", "Alonso", "Realonda"],
       },
     ],
     4: [
       {
-        type: "word-arrangement",
-        question: "Arrange: Rizal studied at different schools",
-        words: ["Rizal", "studied", "at", "different", "schools"],
-        correctOrder: ["Rizal", "studied", "at", "different", "schools"],
+        type: "typing",
+        question: "Spell the grade he earned for studying hard",
+        correctAnswer: "sobresaliente",
+        acceptedAnswers: ["sobresaliente", "Sobresaliente", "SOBRESALIENTE"]
       },
       {
         type: "multiple-choice",

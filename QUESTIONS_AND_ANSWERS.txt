@@ -70,10 +70,11 @@ Options:
   C. Sports
   D. Music
 
+//revised 
 Q5: Arrange these words:
 Type: Word Arrangement
-Words: School, life, prepared, Rizal
-Correct Order: School, life, prepared, Rizal
+Words: Got, Burned, The, To, Moth, And, Flame, Flew, Close, That, Too,
+Correct Order: The, Moth That Flew Too Close To The Flame And Got Burned
 
 --- LEVEL 3 ---
 
@@ -98,6 +99,7 @@ D. His neighbor
 Q3: What story did his mother tell him?
 typing 
 The moth and the flame ✓
+Accept: The moth story, Moth story, the moth that flew too close to the flame and got burned, moth that flew too close to the flame and got burned
 
 
 Q4: Rizal's family was known for being:
@@ -163,6 +165,8 @@ Options:
 Q3: What is Jose Rizal's full name?
 Type: Typing
 Correct Answer: José Protasio Rizal Mercado y Alonso Realonda
+Also accept: Jose Protacio Rizal Mercado y Alonso Realonda
+
 
 /revised
 Q4: José Rizal lived in a big family with __ brothers and sisters. 
@@ -191,56 +195,82 @@ Pairs:
   - Science → Study of nature
   - Math → Numbers and calculations
 
-Q2: Where did Rizal study?
+//revised
+Q1: Match Rizal's student years descriptions:
+Type: Matching
+Pairs:
+  - First studied at? -> Ateneo
+  - sobresaliente -> excellent
+  - peom for youth -> Hope of the fatherland
+
+
+
+//revised
+Q2: What did Pepe want to become to help his mother?
 Type: Multiple Choice
 Options:
-  A. One school only
-  B. Different schools ✓ (CORRECT)
-  C. At home
-  D. Abroad only
+  A. Teacher
+  B. Eye doctor
+  C. Farmer
+  D. Painter
 
-Q3: How did Rizal approach his studies?
+//revise
+Q3: Who ran the University of Santo Tomas
 Type: Typing
-Correct Answer: hard
+Correct Answer: Dominican priests (always accept cases, dont be sensitive)
+Accept: Dominicans
 
+//revise
 Q4: What subjects did Rizal learn?
 Type: Multiple Choice
 Options:
-  A. Only math
-  B. Spanish, science, math and more ✓ (CORRECT)
-  C. Only art
-  D. Only history
+  A. Science
+  B. Spanish ✓ (CORRECT)
+  C. Math
+  D. Law
 
+  asnweer is: ACCEPT ALL OTEHR THAN D. this is tricky since they assume only 1 is right
+  but here is accept A,B AND C 
+
+//revise
 Q5: Arrange the words:
 Type: Word Arrangement
-Words: Rizal, was, an, excellent, student
-Correct Order: Rizal, was, an, excellent, student
+Words: Fatherland, Of, The, Hope
+Correct Order: Hope Of The Fatherland
 
 --- LEVEL 2 ---
 
-Q1: How did Rizal work in his lessons?
+//revised 
+Q1: Why did Rizal study medicine?
 Type: Multiple Choice
 Options:
-  A. Lazily
-  B. Hard ✓ (CORRECT)
-  C. Slowly
-  D. Never
+  A. To help his mother (correct)
+  B. study science
+  C. To work in a hospital
+  D. followed brothers advice
 
-Q2: What did teachers think of Rizal?
+//revised
+Q2: What did Rizal loved writing
 Type: Typing
-Correct Answer: respectful
+Correct Answer: poems
+Accept: Dont be case sensitive, and Accept 'poem'
 
+
+//Slightly revised
 Q3: Rizal was known for being:
 Type: Multiple Choice
 Options:
   A. Lazy
-  B. Disciplined and polite ✓ (CORRECT)
+  B. Disciplined ✓ (CORRECT)
   C. Rude
   D. Careless
 
-Q4: Rizal studied ___ and ___.
-Type: Fill in the Blanks
-Correct Answers: hard, well
+//revised
+Q4: Who ran the Ateneo?
+Typing
+Correct Answers: Jesuit priests,
+Accept: dont be sensitive, accept  Jesuit priest or  Jesuits or Jesuit
+
 
 Q5: What made Rizal stand out in school?
 Type: Multiple Choice
@@ -252,17 +282,17 @@ Options:
 
 --- LEVEL 3 ---
 
-Q1: What passion did Rizal discover? (Type one word)
+Q1: What language did Rizal learn as a subject in school?
 Type: Typing
-Correct Answer: writing
+Correct Answer: Spanish (dont be case sensitive)
 
 Q2: Rizal excelled in:
 Type: Multiple Choice
 Options:
-  A. Sports only
-  B. Academic subjects ✓ (CORRECT)
-  C. Music only
-  D. Nothing
+  A. Sports
+  B. Academics ✓ (CORRECT)
+  C. Music
+  D. Law
 
 Q3: Classify Rizal's activities:
 Type: Classification
@@ -274,18 +304,13 @@ Correct Mapping:
   - Running → Sports
   - Swimming → Sports
 
-Q4: What language did Rizal master?
-Type: Multiple Choice
-Options:
-  A. English
-  B. Spanish ✓ (CORRECT)
-  C. French
-  D. German
+Q4: REMOVED 
 
+//revised
 Q5: Arrange:
 Type: Word Arrangement
-Words: Rizal, loved, to, learn
-Correct Order: Rizal, loved, to, learn
+Words: Protacio, Rizal, Protasio, Y, Alonso, Realonda, Jose, Mercado
+Correct Order: Jose, Protasio, Rizal, Mercado, Y, Alonso, Realonda
 
 --- LEVEL 4 ---
 

@@ -3,13 +3,15 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Zap } from "lucide-react"
+import { Zap, Shield, Sparkles } from "lucide-react"
 import { startHeartRegeneration, formatTimeUntilNextHeart } from "@/lib/heart-regeneration"
 
 export default function LearnSidebar() {
   const [hearts, setHearts] = useState(5)
   const [xp, setXp] = useState(0)
   const [timeUntilNext, setTimeUntilNext] = useState("")
+  const [activeBoosts, setActiveBoosts] = useState<{shield?: number, xpMultiplier?: number}>({})
+  const [timeRemaining, setTimeRemaining] = useState<{shield?: string, xpMultiplier?: string}>({})
 
   useEffect(() => {
     // Load initial data and fetch fresh from server
@@ -52,6 +54,37 @@ export default function LearnSidebar() {
       setTimeUntilNext(formatTimeUntilNextHeart())
     }, 1000)
 
+    // Update boosts and timers
+    const updateBoosts = () => {
+      const boosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+      const now = Date.now()
+      
+      const activeBoostsFiltered: {shield?: number, xpMultiplier?: number} = {}
+      const newTimeRemaining: {shield?: string, xpMultiplier?: string} = {}
+      
+      if (boosts.shield && boosts.shield > now) {
+        activeBoostsFiltered.shield = boosts.shield
+        const diff = boosts.shield - now
+        const minutes = Math.floor(diff / 60000)
+        const seconds = Math.floor((diff % 60000) / 1000)
+        newTimeRemaining.shield = `${minutes}:${seconds.toString().padStart(2, '0')}`
+      }
+      
+      if (boosts.xpMultiplier && boosts.xpMultiplier > now) {
+        activeBoostsFiltered.xpMultiplier = boosts.xpMultiplier
+        const diff = boosts.xpMultiplier - now
+        const minutes = Math.floor(diff / 60000)
+        const seconds = Math.floor((diff % 60000) / 1000)
+        newTimeRemaining.xpMultiplier = `${minutes}:${seconds.toString().padStart(2, '0')}`
+      }
+      
+      setActiveBoosts(activeBoostsFiltered)
+      setTimeRemaining(newTimeRemaining)
+    }
+    
+    updateBoosts()
+    const boostInterval = setInterval(updateBoosts, 1000)
+
     // Listen for heart updates
     const handleHeartsUpdated = (event: any) => {
       setHearts(event.detail.hearts)
@@ -74,17 +107,41 @@ export default function LearnSidebar() {
     return () => {
       clearInterval(regenInterval)
       clearInterval(timerInterval)
+      clearInterval(boostInterval)
       window.removeEventListener("heartsUpdated", handleHeartsUpdated)
       window.removeEventListener("xpUpdated", handleXPUpdated)
       window.removeEventListener("storage", handleStorageChange)
     }
   }, [])
 
-  const quests = [
-    { title: "Earn 20 XP", current: xp, target: 20 },
-    { title: "Earn 100 XP", current: xp, target: 100 },
-    { title: "Earn 200 XP", current: xp, target: 200 },
-  ]
+  const [dailyQuests, setDailyQuests] = useState<any[]>([])
+
+  // Load daily quests
+  useEffect(() => {
+    const loadDailyQuests = () => {
+      const today = new Date().toDateString()
+      const savedQuests = localStorage.getItem("dailyQuests")
+      const savedDate = localStorage.getItem("dailyQuestsDate")
+      
+      // Check if we need to generate new quests
+      if (savedDate !== today || !savedQuests) {
+        // Generate 3 random quests
+        import("@/missions.json").then((missions) => {
+          const allMissions = missions.dailyMissions
+          const shuffled = [...allMissions].sort(() => Math.random() - 0.5)
+          const selected = shuffled.slice(0, 3)
+          
+          localStorage.setItem("dailyQuests", JSON.stringify(selected))
+          localStorage.setItem("dailyQuestsDate", today)
+          setDailyQuests(selected)
+        })
+      } else {
+        setDailyQuests(JSON.parse(savedQuests))
+      }
+    }
+    
+    loadDailyQuests()
+  }, [])
 
   return (
     <div className="w-full space-y-6">
@@ -96,6 +153,8 @@ export default function LearnSidebar() {
             <Zap className="w-7 h-7 text-orange-500 fill-orange-500" />
             <span className="text-xl font-bold text-gray-800">{xp}</span>
           </div>
+
+
 
           {/* Hearts */}
           <div className="flex flex-col items-end">
@@ -110,24 +169,31 @@ export default function LearnSidebar() {
         </div>
       </div>
 
-      {/* Quests Section */}
+      {/* Daily Quests Section */}
       <div className="rounded-2xl border border-gray-300/80 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-800">Quests</h3>
-          <Link href="/student/quests" className="text-sm font-bold text-blue-500 hover:text-blue-600">
-            VIEW ALL
-          </Link>
-        </div>
+        <h3 className="text-xl font-bold text-gray-800 mb-6">Daily Quests</h3>
 
         <div className="space-y-6">
-          {quests.map((quest, index) => {
-            const progress = Math.min((quest.current / quest.target) * 100, 100)
+          {dailyQuests.map((quest, index) => {
+            let current = 0
+            if (quest.type === "xp") {
+              current = xp
+            } else if (quest.type === "levels") {
+              const completedToday = JSON.parse(localStorage.getItem("completedLevelsToday") || "0")
+              current = completedToday
+            }
+            
+            const progress = Math.min((current / quest.target) * 100, 100)
+            const isCompleted = current >= quest.target
 
             return (
               <div key={index} className="flex items-start gap-3">
-                <Zap className="w-6 h-6 text-orange-500 fill-orange-500 flex-shrink-0 mt-1" />
+                <Image src="/heart.svg" alt="Heart" width={24} height={24} className="flex-shrink-0 mt-1" />
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">{quest.title}</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-semibold text-gray-700">{quest.title}</p>
+                    {isCompleted && <span className="text-xs text-green-600 font-bold">+{quest.reward}</span>}
+                  </div>
                   <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-green-500 transition-all duration-300"
@@ -140,6 +206,41 @@ export default function LearnSidebar() {
           })}
         </div>
       </div>
+
+      {/* Active Effects Section */}
+      {(activeBoosts.shield || activeBoosts.xpMultiplier) && (
+        <div className="rounded-2xl border border-gray-300/80 p-4">
+          <h3 className="text-lg font-bold text-gray-800 mb-3">Active Effects</h3>
+          
+          <div className="space-y-2">
+            {activeBoosts.shield && (
+              <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="bg-blue-100 border border-blue-300 rounded-md p-1.5">
+                  <Shield className="w-4 h-4 text-blue-600" strokeWidth={2.5} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-gray-800">Shield Boost</p>
+                  <p className="text-[10px] text-gray-600">No hearts lost</p>
+                </div>
+                <span className="text-xs font-bold text-blue-600 shrink-0">{timeRemaining.shield}</span>
+              </div>
+            )}
+            
+            {activeBoosts.xpMultiplier && (
+              <div className="flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="bg-yellow-100 border border-yellow-300 rounded-md p-1.5">
+                  <Sparkles className="w-4 h-4 text-yellow-600" strokeWidth={2.5} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-gray-800">2x XP Multiplier</p>
+                  <p className="text-[10px] text-gray-600">Double XP earned</p>
+                </div>
+                <span className="text-xs font-bold text-yellow-600 shrink-0">{timeRemaining.xpMultiplier}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

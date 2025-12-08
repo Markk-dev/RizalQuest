@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { NotebookText } from "lucide-react";
 
@@ -14,6 +15,21 @@ type UnitBannerProps = {
 
 export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) => {
   const router = useRouter()
+  const [isUnlocked, setIsUnlocked] = useState(false)
+  
+  useEffect(() => {
+    // Check if this chapter is unlocked
+    const currentLevel = JSON.parse(localStorage.getItem("currentLevel") || '{"chapter": 1, "level": 1}')
+    const completedLevels = JSON.parse(localStorage.getItem("completedLevels") || "[]")
+    
+    // Chapter is unlocked if:
+    // 1. It's the current chapter or earlier
+    // 2. OR any level from this chapter has been completed
+    const isCurrentOrPast = currentLevel.chapter >= chapterId
+    const hasCompletedLevel = completedLevels.some((level: string) => level.startsWith(`${chapterId}-`))
+    
+    setIsUnlocked(isCurrentOrPast || hasCompletedLevel)
+  }, [])
   // Chapter color mapping
   const chapterColors = {
     1: { bg: "bg-green-500", btn: "bg-green-600 hover:bg-green-700 border-green-700" },
@@ -38,8 +54,13 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
       <Button
         size="lg"
         variant="secondary"
-        onClick={() => router.push(`/student/learn/story/${chapterId}`)}
-        className={cn("hidden border-2 border-b-4 active:border-b-2 xl:flex text-white", colors.btn)}
+        onClick={() => isUnlocked && router.push(`/student/learn/story/${chapterId}`)}
+        disabled={!isUnlocked}
+        className={cn(
+          "hidden border-2 border-b-4 active:border-b-2 xl:flex text-white",
+          colors.btn,
+          !isUnlocked && "opacity-50 cursor-not-allowed"
+        )}
       >
         <NotebookText className="mr-2" />
         READ

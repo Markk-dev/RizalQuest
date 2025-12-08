@@ -5,6 +5,7 @@ import {
   updateUserHearts,
   updateUserXP,
   addCompletedLevel,
+  getUserById,
 } from "@/lib/auth-service"
 
 export async function POST(request: NextRequest) {
@@ -43,6 +44,10 @@ export async function POST(request: NextRequest) {
       case "getProgress":
         const progress = await getUserProgress(userId)
         return NextResponse.json({ progress })
+
+      case "getUser":
+        const user = await getUserById(userId)
+        return NextResponse.json({ user })
 
       default:
         return NextResponse.json(

@@ -9,6 +9,7 @@ interface WordArrangementProps {
     question: string
     words: string[]
     correctOrder: string[]
+    prefilledWords?: string[]
   }
   onAnswer: (result: any) => void
   onNext: () => void
@@ -49,7 +50,8 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
     }
     setShuffledWords(shuffled)
-    setSelected([])
+    // Set prefilled words if provided
+    setSelected(question.prefilledWords || [])
     setAnswered(false)
   }, [question])
 
@@ -63,6 +65,10 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
 
   const handleRemoveWord = (idx: number) => {
     if (!answered) {
+      // Don't allow removing prefilled words
+      const prefilledCount = question.prefilledWords?.length || 0
+      if (idx < prefilledCount) return
+      
       setSelected(selected.filter((_, i) => i !== idx))
     }
   }
@@ -106,13 +112,13 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
   const handleNext = () => {
     if (isCorrect) {
       // If correct, move to next question
-      setSelected([])
+      setSelected(question.prefilledWords || [])
       setAnswered(false)
       setIsCorrect(false)
       onNext()
     } else {
-      // If wrong, just reset to try again
-      setSelected([])
+      // If wrong, just reset to try again but keep prefilled words
+      setSelected(question.prefilledWords || [])
       setAnswered(false)
       setIsCorrect(false)
     }
@@ -133,16 +139,25 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
             {selected.length === 0 ? (
               <span className="text-gray-500 text-lg">Tap words below to arrange them</span>
             ) : (
-              selected.map((word, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleRemoveWord(idx)}
-                  disabled={answered}
-                  className="px-5 py-3 rounded-xl border-2 border-b-4 border-green-600 bg-green-500 text-white font-semibold text-lg hover:bg-green-600 transition-all active:border-b-2"
-                >
-                  {word}
-                </button>
-              ))
+              selected.map((word, idx) => {
+                const prefilledCount = question.prefilledWords?.length || 0
+                const isPrefilled = idx < prefilledCount
+                
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => handleRemoveWord(idx)}
+                    disabled={answered || isPrefilled}
+                    className={`px-5 py-3 rounded-xl border-2 border-b-4 font-semibold text-lg transition-all active:border-b-2 ${
+                      isPrefilled
+                        ? "border-gray-400 bg-gray-300 text-gray-700 cursor-not-allowed"
+                        : "border-green-600 bg-green-500 text-white hover:bg-green-600"
+                    }`}
+                  >
+                    {word}
+                  </button>
+                )
+              })
             )}
           </div>
         </div>

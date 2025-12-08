@@ -6,22 +6,23 @@ import NoHeartsModal from "../no-hearts-modal"
 import { toast } from "sonner"
 import { Info } from "lucide-react"
 
-interface MatchingProps {
+interface MultiInputTypingProps {
   question: {
     type: string
     question: string
-    pairs: Array<{ left: string; right: string }>
+    correctAnswers: string // Comma-separated valid answers
+    inputCount: number
+    placeholder?: string
   }
   onAnswer: (result: any) => void
   onNext: () => void
 }
 
-export default function Matching({ question, onAnswer, onNext }: MatchingProps) {
-  const [selectedOrder, setSelectedOrder] = useState<string[]>([]) // Order of tapped right items
+export default function MultiInputTyping({ question, onAnswer, onNext }: MultiInputTypingProps) {
+  const [inputs, setInputs] = useState<string[]>(Array(question.inputCount).fill(""))
   const [answered, setAnswered] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState<number | null>(null)
-  const [shuffledRightItems, setShuffledRightItems] = useState<string[]>([])
   const [showNoHeartsModal, setShowNoHeartsModal] = useState(false)
   const [wrongAttempts, setWrongAttempts] = useState(0)
 
@@ -40,34 +41,22 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
     return () => window.removeEventListener("heartsUpdated", handleHeartsUpdated)
   }, [])
 
-  useEffect(() => {
-    // Shuffle right column items when question changes
-    const rightItems = question.pairs.map(pair => pair.right)
-    const shuffled = [...rightItems]
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
-    setShuffledRightItems(shuffled)
-    setSelectedOrder([])
-    setAnswered(false)
-  }, [question])
-
-  const handleTap = (rightItem: string) => {
-    if (answered) return
-    
-    // If already selected, remove it (redo)
-    if (selectedOrder.includes(rightItem)) {
-      setSelectedOrder(selectedOrder.filter(item => item !== rightItem))
-    } else {
-      // Add to selection order
-      setSelectedOrder([...selectedOrder, rightItem])
-    }
+  const normalizeString = (str: string) => {
+    return str.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   }
 
   const handleSubmit = async () => {
-    // Check if user's order matches the correct order
-    const correct = question.pairs.every((pair, index) => selectedOrder[index] === pair.right)
+    const validAnswers = question.correctAnswers.split(",").map(ans => normalizeString(ans.trim()))
+    const normalizedInputs = inputs.map(inp => normalizeString(inp))
+    
+    // Check if all inputs are filled
+    const allFilled = normalizedInputs.every(inp => inp.length > 0)
+    
+    // Check if all inputs are valid and unique
+    const allValid = normalizedInputs.every(inp => validAnswers.includes(inp))
+    const allUnique = new Set(normalizedInputs).size === normalizedInputs.length
+    
+    const correct = allFilled && allValid && allUnique
     setIsCorrect(correct)
     setAnswered(true)
     
@@ -127,19 +116,25 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
 
   const handleNext = () => {
     if (isCorrect) {
-      setSelectedOrder([])
+      setInputs(Array(question.inputCount).fill(""))
       setAnswered(false)
       setIsCorrect(false)
       setWrongAttempts(0)
       onNext()
     } else {
-      setSelectedOrder([])
+      setInputs(Array(question.inputCount).fill(""))
       setAnswered(false)
       setIsCorrect(false)
     }
   }
 
-  const isComplete = selectedOrder.length === question.pairs.length
+  const handleInputChange = (index: number, value: string) => {
+    const newInputs = [...inputs]
+    newInputs[index] = value
+    setInputs(newInputs)
+  }
+
+  const allFilled = inputs.every(inp => inp.trim().length > 0)
 
   return (
     <>
@@ -152,62 +147,24 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Left column - Questions */}
-          <div className="space-y-4">
-            {question.pairs.map((pair, idx) => (
-              <div
-                key={`left-${idx}`}
-                className="p-5 rounded-2xl border-2 border-b-4 border-gray-300 bg-gray-50 text-black font-semibold text-lg flex items-center justify-between"
-              >
-                <span>{pair.left}</span>
-                <div className="w-7 h-7 rounded-full border-2 border-gray-400 bg-gray-300 text-gray-700 flex items-center justify-center font-bold text-sm shrink-0">
-                  {idx + 1}
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          {/* Right column - Answers (shuffled, tap to order) */}
-          <div className="space-y-4">
-            {shuffledRightItems.map((rightItem, idx) => {
-              const orderIndex = selectedOrder.indexOf(rightItem)
-              const isSelected = orderIndex !== -1
-              const orderNumber = isSelected ? orderIndex + 1 : null
-              
-              return (
-                <button
-                  key={`right-${idx}`}
-                  onClick={() => handleTap(rightItem)}
-                  disabled={answered}
-                  className={`w-full p-5 rounded-2xl border-2 border-b-4 transition-all font-semibold text-lg active:border-b-2 flex items-center justify-between ${
-                    answered
-                      ? isCorrect && isSelected
-                        ? "border-green-500 border-b-green-600 bg-green-50 text-black"
-                        : !isCorrect && isSelected
-                          ? "border-red-500 border-b-red-600 bg-red-50 text-black"
-                          : "border-gray-300 bg-white text-black"
-                      : isSelected
-                        ? "border-green-500 border-b-green-600 bg-green-50 text-black"
-                        : "border-gray-300 bg-white text-black hover:border-green-500 hover:bg-gray-50"
-                  }`}
-                >
-                  <span>{rightItem}</span>
-                  {orderNumber && (
-                    <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-sm shrink-0 ${
-                      answered
-                        ? isCorrect
-                          ? "border-green-500 bg-green-500 text-white"
-                          : "border-red-500 bg-red-500 text-white"
-                        : "border-green-500 bg-green-500 text-white"
-                    }`}>
-                      {orderNumber}
-                    </div>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+        <div className="space-y-4">
+          {inputs.map((input, index) => (
+            <input
+              key={index}
+              type="text"
+              value={input}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              disabled={answered}
+              placeholder={question.placeholder || `Answer ${index + 1}...`}
+              className={`w-full p-6 rounded-2xl border-2 border-b-4 text-xl font-semibold transition-all ${
+                answered
+                  ? isCorrect
+                    ? "border-green-500 border-b-green-600 bg-green-50 text-black"
+                    : "border-red-500 border-b-red-600 bg-red-50 text-black"
+                  : "border-gray-200 border-b-gray-300 bg-white text-black focus:border-green-500 focus:outline-none"
+              }`}
+            />
+          ))}
         </div>
       </div>
 
@@ -243,7 +200,7 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
                 variant="secondary" 
                 size="lg" 
                 onClick={handleNext}
-                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white border-2 border-red-600 border-b-4 border-b-red-700 active:border-b-2" : ""}
+                className={!isCorrect ? "bg-red-500 hover:bg-red-600 text-white border-red-600 border-b-red-700" : ""}
               >
                 {isCorrect ? "Next" : "Try again"}
               </Button>
@@ -254,7 +211,7 @@ export default function Matching({ question, onAnswer, onNext }: MatchingProps) 
                 variant="secondary" 
                 size="lg" 
                 onClick={handleSubmit}
-                disabled={!isComplete}
+                disabled={!allFilled}
                 className="disabled:opacity-50"
               >
                 Check

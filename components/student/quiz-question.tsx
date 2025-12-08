@@ -4,27 +4,30 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import NoHeartsModal from "./no-hearts-modal"
 import { toast } from "sonner"
-import { Info } from "lucide-react"
+import { Info, Shield } from "lucide-react"
 
 interface QuizQuestionProps {
   question: {
-    id: number
+    id?: number
     question: string
     options: string[]
-    correct: number
+    correct: number | number[]
+    multipleCorrect?: boolean
   }
-  onAnswer: (index: number) => void
+  onAnswer: (index: number | number[]) => void
   onNext: () => void
 }
 
 export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestionProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([])
   const [isAnswered, setIsAnswered] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [hearts, setHearts] = useState<number | null>(null)
   const [shuffledOptions, setShuffledOptions] = useState<{option: string, originalIndex: number}[]>([])
   const [showNoHeartsModal, setShowNoHeartsModal] = useState(false)
   const [wrongAttempts, setWrongAttempts] = useState(0)
+  const multipleCorrect = question.multipleCorrect || false
 
   useEffect(() => {
     // Fetch hearts from user object in localStorage
@@ -49,6 +52,10 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
     }
     
     setShuffledOptions(shuffled)
+    setSelectedIndex(null)
+    setSelectedIndices([])
+    setIsAnswered(false)
+    setIsCorrect(false)
   }, [question])
 
   useEffect(() => {
@@ -65,25 +72,54 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
 
   const handleSelect = (index: number) => {
     if (!isAnswered) {
-      setSelectedIndex(index)
+      if (multipleCorrect) {
+        // Toggle selection for multiple correct answers
+        if (selectedIndices.includes(index)) {
+          setSelectedIndices(selectedIndices.filter(i => i !== index))
+        } else {
+          setSelectedIndices([...selectedIndices, index])
+        }
+      } else {
+        setSelectedIndex(index)
+      }
     }
   }
 
   const handleCheck = async () => {
-    if (selectedIndex !== null && hearts !== null) {
-      const originalIndex = shuffledOptions[selectedIndex].originalIndex
-      const correct = originalIndex === question.correct
+    if (hearts !== null && (multipleCorrect ? selectedIndices.length > 0 : selectedIndex !== null)) {
+      let correct = false
+      let answerResult: number | number[]
+      
+      if (multipleCorrect) {
+        // Check multiple selections
+        const originalIndices = selectedIndices.map(i => shuffledOptions[i].originalIndex).sort()
+        const correctIndices = Array.isArray(question.correct) ? [...question.correct].sort() : [question.correct]
+        correct = JSON.stringify(originalIndices) === JSON.stringify(correctIndices)
+        answerResult = originalIndices
+      } else {
+        // Single selection
+        const originalIndex = shuffledOptions[selectedIndex!].originalIndex
+        correct = Array.isArray(question.correct) 
+          ? question.correct.includes(originalIndex)
+          : originalIndex === question.correct
+        answerResult = originalIndex
+      }
+      
       setIsCorrect(correct)
       setIsAnswered(true)
       
       if (!correct) {
+        // Check if shield is active
+        const activeBoosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+        const shieldActive = activeBoosts.shield && activeBoosts.shield > Date.now()
+        
         // Increment wrong attempts
         const newWrongAttempts = wrongAttempts + 1
         setWrongAttempts(newWrongAttempts)
         
         // Show hint after 3 wrong attempts (and keep showing on subsequent failures)
         if (newWrongAttempts >= 3) {
-          toast("Hint: Try recalling the story", {
+          toast("Try recalling the story", {
             duration: 5000,
             icon: <Info className="w-5 h-5 text-yellow-700" strokeWidth={2.5} />,
             style: {
@@ -102,9 +138,38 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
           })
         }
         
-        // Decrease hearts by 1 if wrong
-        const newHearts = Math.max(0, hearts - 1)
+        // Decrease hearts by 1 if wrong (unless shield is active)
+        const newHearts = shieldActive ? hearts : Math.max(0, hearts - 1)
         setHearts(newHearts)
+        
+        if (shieldActive && !correct) {
+          // Check if shield toast was already shown for this level
+          const currentLevelData = JSON.parse(localStorage.getItem("currentLevel") || '{"chapter": 1, "level": 1}')
+          const levelKey = `${currentLevelData.chapter}-${currentLevelData.level}`
+          const shieldToastKey = `shieldToast_${levelKey}`
+          const toastShown = localStorage.getItem(shieldToastKey)
+          
+          if (!toastShown) {
+            localStorage.setItem(shieldToastKey, "true")
+            toast("Shield protected you!", {
+              description: "No hearts lost",
+              duration: 5000,
+              icon: <Shield className="w-5 h-5 text-blue-700" strokeWidth={2.5} />,
+              style: {
+                background: '#dbeafe',
+                color: '#1e3a8a',
+                border: '2px solid #60a5fa',
+                borderBottom: '4px solid #3b82f6',
+                fontSize: '14px',
+                fontWeight: '500',
+                padding: '10px 14px',
+                maxWidth: '320px',
+                borderRadius: '10px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              },
+            })
+          }
+        }
         
         // Update user object in localStorage
         const user = JSON.parse(localStorage.getItem("user") || "{}")
@@ -137,7 +202,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
         }
       }
       
-      onAnswer(originalIndex)
+      onAnswer(answerResult)
     }
   }
 
@@ -145,6 +210,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
     if (isCorrect) {
       // If correct, move to next question and reset wrong attempts
       setSelectedIndex(null)
+      setSelectedIndices([])
       setIsAnswered(false)
       setIsCorrect(false)
       setWrongAttempts(0)
@@ -152,6 +218,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
     } else {
       // If wrong, just reset to try again
       setSelectedIndex(null)
+      setSelectedIndices([])
       setIsAnswered(false)
       setIsCorrect(false)
     }
@@ -167,14 +234,15 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
           <h2 className="text-2xl md:text-3xl font-bold text-black text-left leading-relaxed">
             {question.question}
           </h2>
-          
-
         </div>
 
         {/* Options - Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {shuffledOptions.map((item, index) => {
-            const isCorrectOption = item.originalIndex === question.correct
+            const correctIndices = Array.isArray(question.correct) ? question.correct : [question.correct]
+            const isCorrectOption = correctIndices.includes(item.originalIndex)
+            const showCorrectAnswer = wrongAttempts >= 3 // Only show correct answer after 3 strikes
+            const isSelected = multipleCorrect ? selectedIndices.includes(index) : selectedIndex === index
             
             return (
               <button
@@ -182,12 +250,12 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
                 onClick={() => handleSelect(index)}
                 disabled={isAnswered}
                 className={`p-5 rounded-2xl border-2 border-b-4 active:border-b-2 transition-all duration-200 text-left min-h-[100px] flex items-center ${
-                  isAnswered && isCorrectOption
+                  isAnswered && isCorrectOption && showCorrectAnswer
                     ? "border-green-500 border-b-green-600 bg-green-50 text-black"
-                    : isAnswered && index === selectedIndex && !isCorrect
+                    : isAnswered && isSelected && !isCorrect
                       ? "border-red-500 border-b-red-600 bg-red-50 text-black"
-                      : selectedIndex === index && !isAnswered
-                        ? "border-green-500 border-b-green-600 bg-green-50 text-black"
+                      : isSelected && !isAnswered
+                        ? "border-blue-500 border-b-blue-600 bg-blue-50 text-black"
                         : "border-gray-200 border-b-gray-300 bg-white text-black hover:bg-gray-50"
                 }`}
               >
@@ -195,12 +263,12 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
                   <span className="text-lg md:text-xl font-semibold flex-1 text-center">{item.option}</span>
                   <div
                     className={`w-9 h-9 rounded-full border-2 flex items-center justify-center font-bold text-base shrink-0 ${
-                      isAnswered && isCorrectOption
+                      isAnswered && isCorrectOption && showCorrectAnswer
                         ? "border-green-500 bg-green-500 text-white"
-                        : isAnswered && index === selectedIndex && !isCorrect
+                        : isAnswered && isSelected && !isCorrect
                           ? "border-red-500 bg-red-500 text-white"
-                          : selectedIndex === index && !isAnswered
-                            ? "border-green-500 bg-green-500 text-white"
+                          : isSelected && !isAnswered
+                            ? "border-blue-500 bg-blue-500 text-white"
                             : "border-gray-300 bg-white text-gray-500"
                     }`}
                   >
@@ -260,7 +328,7 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
                 variant="secondary" 
                 size="lg" 
                 onClick={handleCheck}
-                disabled={selectedIndex === null}
+                disabled={multipleCorrect ? selectedIndices.length === 0 : selectedIndex === null}
                 className="disabled:opacity-50"
               >
                 Check
