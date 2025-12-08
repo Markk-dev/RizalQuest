@@ -327,9 +327,10 @@ Options:
   C. A chef
   D. A soldier
 
-Q3: What did Rizal discover a passion for?
+//revised
+Q3: Give at least one of what Rizal learned when he was in school?
 Type: Typing
-Correct Answer: art
+Accept answers: fencing, wrestling, measure land like a land surveyor, or if he typed this whole accept this too -> fencing, wrestling, and how to measure land like a land surveyor
 
 Q4: Teachers respected Rizal because he was:
 Type: Multiple Choice
@@ -339,21 +340,17 @@ Options:
   C. Tall
   D. Old
 
-Q5: Rizal was a ___ student who loved ___.
-Type: Fill in the Blanks
-Correct Answers: dedicated, learning
+//revised
+Q5: What was Rizal passionate about?
+multiples choice: 
+Correct Answers: writing poems, writing essays, art
+options: writing poems, writing essays, law, art
 
 --- LEVEL 5 ---
 
-Q1: Classify these traits of Rizal:
-Type: Classification
-Items: Disciplined, Lazy, Polite, Rude
-Categories: Positive, Negative
-Correct Mapping:
-  - Disciplined → Positive
-  - Polite → Positive
-  - Lazy → Negative
-  - Rude → Negative
+Q1: Tracing Alipato
+Type: Drawing component 
+
 
 Q2: What did school life prepare Rizal for?
 Type: Multiple Choice
@@ -363,9 +360,10 @@ Options:
   C. Farming
   D. Business
 
-Q3: What quality made Rizal successful?
+//revised
+Q3: What does Sobresaliente means?
 Type: Typing
-Correct Answer: discipline
+Correct Answer: excellent
 
 Q4: Arrange:
 Type: Word Arrangement
@@ -380,40 +378,77 @@ Options:
   C. Boring
   D. Short
 
-================================================================================
-NOTES FOR EDITING:
-================================================================================
-
-1. Multiple Choice Questions:
-   - The correct answer is marked with ✓
-   - Options are labeled A, B, C, D
-   - The "correct" field in the code uses index (0=A, 1=B, 2=C, 3=D)
-
-2. Typing Questions:
-   - Answer is case-insensitive in the code
-   - Keep answers simple (one word preferred)
-
-3. Word Arrangement:
-   - Words will be shuffled when displayed
-   - Correct order must match exactly
-
-4. Classification:
-   - Items will be dragged to categories
-   - Each item must map to exactly one category
-
-5. Fill in the Blanks:
-   - Two blanks per question
-   - Order matters (first blank, second blank)
-
-6. Matching:
-   - Pairs of left and right items
-   - Used for connecting related concepts
 
 ================================================================================
-TO UPDATE QUESTIONS:
+CHAPTER 3: TRAVELS ABROAD
 ================================================================================
 
-After editing this file, update the corresponding section in:
-lib/questions.ts
+NOTE: Chapter 3 currently uses AUTO-GENERATED questions from the storyline.
+Each level shows a sentence from the chapter story and asks:
+"What does this sentence tell us?"
+Options: About Rizal's life (CORRECT), About another person, About animals, About food
 
-Make sure to maintain the same structure and data types!
+To add custom questions for Chapter 3, they need to be added to lib/questions.ts
+
+================================================================================
+CHAPTER 4: NOLI ME TANGERE
+================================================================================
+
+NOTE: Chapter 4 currently uses AUTO-GENERATED questions from the storyline.
+Each level shows a sentence from the chapter story and asks:
+"What does this sentence tell us?"
+Options: About Rizal's life (CORRECT), About another person, About animals, About food
+
+To add custom questions for Chapter 4, they need to be added to lib/questions.ts
+
+================================================================================
+CHAPTER 5: RETURN TO PHILIPPINES
+================================================================================
+
+NOTE: Chapter 5 currently uses AUTO-GENERATED questions from the storyline.
+Each level shows a sentence from the chapter story and asks:
+"What does this sentence tell us?"
+Options: About Rizal's life (CORRECT), About another person, About animals, About food
+
+To add custom questions for Chapter 5, they need to be added to lib/questions.ts
+
+================================================================================
+CHAPTERS 6-8: NOT YET IMPLEMENTED
+================================================================================
+
+Chapters 6, 7, and 8 also use auto-generated questions from the storyline.
+Custom questions need to be created and added to lib/questions.ts for these chapters.
+
+================================================================================
+HOW TO ADD CUSTOM QUESTIONS
+================================================================================
+
+To add custom questions for any chapter:
+
+1. Open lib/questions.ts
+2. Add a new chapter number to QUESTION_BANK (e.g., "3: {")
+3. Add levels 1-5 with 5 questions each
+4. Use the same format as Chapters 1 and 2
+
+Example structure:
+3: {
+  1: [
+    { type: "multiple-choice", question: "...", options: [...], correct: 0 },
+    { type: "typing", question: "...", correctAnswer: "..." },
+    // ... 3 more questions
+  ],
+  2: [ /* 5 questions */ ],
+  3: [ /* 5 questions */ ],
+  4: [ /* 5 questions */ ],
+  5: [ /* 5 questions */ ],
+}
+
+Available question types:
+- multiple-choice
+- typing
+- multi-input-typing
+- matching
+- classification
+- word-arrangement
+- fill-in-blanks
+- drawing

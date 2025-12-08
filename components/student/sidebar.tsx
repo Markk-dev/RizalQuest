@@ -7,7 +7,7 @@ import { BookOpen, Award, Target, ShoppingBag, LogOut } from "lucide-react"
 const MENU_ITEMS = [
   { label: "Learn", icon: BookOpen, href: "/student/learn" },
   { label: "Stats", icon: Award, href: "/student/stats" },
-  { label: "Quests", icon: Target, href: "/student/quests" },
+  { label: "Achievements", icon: Target, href: "/student/quests" },
   { label: "Shop", icon: ShoppingBag, href: "/student/shop" },
 ]
 

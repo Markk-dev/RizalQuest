@@ -264,38 +264,39 @@ export const QUESTION_BANK = {
       {
         type: "multiple-choice",
         question: "Rizal's education helped him become:",
-        options: ["A farmer", "A national hero", "A chef", "A soldier"],
+        options: ["A businessman", "A national hero", "A professional philosopher", "A soldier"],
         correct: 1,
       },
       {
         type: "typing",
-        question: "What did Rizal discover a passion for?",
-        correctAnswer: "art",
+        question: "Give at least one of what Rizal learned when he was in school?",
+        correctAnswer: "fencing",
+        acceptedAnswers: [
+          "fencing",
+          "Fencing",
+          "wrestling",
+          "Wrestling",
+          "measure land like a land surveyor",
+          "Measure land like a land surveyor",
+          "fencing, wrestling, and how to measure land like a land surveyor",
+          "Fencing, wrestling, and how to measure land like a land surveyor",
+          "fencing wrestling and how to measure land like a land surveyor",
+          "Fencing wrestling and how to measure land like a land surveyor"
+        ]
       },
       {
         type: "multiple-choice",
-        question: "Teachers respected Rizal because he was:",
-        options: ["Rich", "Disciplined and polite", "Tall", "Old"],
-        correct: 1,
-      },
-      {
-        type: "fill-in-blanks",
-        question: "Rizal was a ___ student who loved ___.",
-        blanks: ["dedicated", "learning"],
+        question: "What was Rizal passionate about?",
+        options: ["Writing poems", "Writing essays", "Law", "Art"],
+        correct: [0, 1, 3], // Writing poems, Writing essays, Art
+        multipleCorrect: true
       },
     ],
     5: [
       {
-        type: "classification",
-        question: "Classify these traits of Rizal:",
-        items: ["Disciplined", "Lazy", "Polite", "Rude"],
-        categories: ["Positive", "Negative"],
-        correctMapping: {
-          "Disciplined": "Positive",
-          "Polite": "Positive",
-          "Lazy": "Negative",
-          "Rude": "Negative"
-        }
+        type: "drawing",
+        question: "Trace Rizal's dog, Alipato, to continue",
+        imageUrl: "/traceable/alipato.png"
       },
       {
         type: "multiple-choice",
@@ -305,8 +306,9 @@ export const QUESTION_BANK = {
       },
       {
         type: "typing",
-        question: "What quality made Rizal successful?",
-        correctAnswer: "discipline",
+        question: "What does Sobresaliente means?",
+        correctAnswer: "excellent",
+        acceptedAnswers: ["excellent", "Excellent", "EXCELLENT"]
       },
       {
         type: "word-arrangement",

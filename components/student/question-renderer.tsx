@@ -7,6 +7,7 @@ import ClassificationQuestion from "./question-types/classification"
 import FillInBlanksQuestion from "./question-types/fill-in-blanks"
 import WordArrangementQuestion from "./question-types/word-arrangement"
 import MatchingQuestion from "./question-types/matching"
+import DrawingQuestion from "./question-types/drawing"
 
 interface QuestionRendererProps {
   question: any
@@ -36,6 +37,9 @@ export default function QuestionRenderer({ question, onAnswer, onNext }: Questio
     
     case "matching":
       return <MatchingQuestion question={question} onAnswer={onAnswer} onNext={onNext} />
+    
+    case "drawing":
+      return <DrawingQuestion question={question.question} imageUrl={question.imageUrl || ""} onAnswer={onAnswer} onNext={onNext} />
     
     default:
       return <QuizQuestion question={question} onAnswer={onAnswer} onNext={onNext} />

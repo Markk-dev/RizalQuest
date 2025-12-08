@@ -106,6 +106,20 @@ export default function LessonPage() {
       completed.add(levelKey)
       localStorage.setItem("completedLevels", JSON.stringify([...completed]))
 
+      // Track daily quest progress
+      const today = new Date().toDateString()
+      const savedDate = localStorage.getItem("completedLevelsTodayDate")
+      
+      if (savedDate !== today) {
+        // New day, reset counter
+        localStorage.setItem("completedLevelsToday", "1")
+        localStorage.setItem("completedLevelsTodayDate", today)
+      } else {
+        // Same day, increment counter
+        const todayCount = parseInt(localStorage.getItem("completedLevelsToday") || "0")
+        localStorage.setItem("completedLevelsToday", String(todayCount + 1))
+      }
+
       // Sync completed level to database
       await syncCompletedLevel(levelKey).catch(console.error)
 

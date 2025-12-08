@@ -8,6 +8,7 @@ import { UnitBanner } from "@/components/ui/unit-banner"
 export default function ChapterGrid() {
   const [completedLevels, setCompletedLevels] = useState<Set<string>>(new Set())
   const [currentLevel, setCurrentLevel] = useState({ chapter: 1, level: 1 })
+  const [shouldScroll, setShouldScroll] = useState(false)
 
   useEffect(() => {
     // Load progress from database
@@ -26,6 +27,7 @@ export default function ChapterGrid() {
             chapter: progress.currentChapter,
             level: progress.currentLevel,
           })
+          setShouldScroll(true)
           
           // Also update localStorage for offline access
           localStorage.setItem("completedLevels", JSON.stringify(completed))
@@ -43,6 +45,7 @@ export default function ChapterGrid() {
           const savedCurrent = localStorage.getItem("currentLevel")
           if (savedCurrent) {
             setCurrentLevel(JSON.parse(savedCurrent))
+            setShouldScroll(true)
           }
         }
       } catch (error) {
@@ -56,6 +59,7 @@ export default function ChapterGrid() {
         const savedCurrent = localStorage.getItem("currentLevel")
         if (savedCurrent) {
           setCurrentLevel(JSON.parse(savedCurrent))
+          setShouldScroll(true)
         }
       }
     }
@@ -63,10 +67,24 @@ export default function ChapterGrid() {
     loadUserProgress()
   }, [])
 
+  // Auto-scroll to current chapter
+  useEffect(() => {
+    if (shouldScroll && currentLevel.chapter > 1) {
+      const timer = setTimeout(() => {
+        const chapterElement = document.getElementById(`chapter-${currentLevel.chapter}`)
+        if (chapterElement) {
+          chapterElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 300) // Small delay to ensure DOM is ready
+      
+      return () => clearTimeout(timer)
+    }
+  }, [shouldScroll, currentLevel.chapter])
+
   return (
     <div className="relative w-full pb-32">
       {CHAPTERS.map((chapter) => (
-        <div key={chapter.id} className="w-full mb-8">
+        <div key={chapter.id} id={`chapter-${chapter.id}`} className="w-full mb-8">
           {/* Chapter Banner */}
           <div className="mb-6">
             <UnitBanner title={`Chapter ${chapter.id}: ${chapter.title}`} description={chapter.description} chapterId={chapter.id} />
