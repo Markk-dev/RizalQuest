@@ -162,7 +162,7 @@ export default function ChapterGrid() {
             {chapter.id === 5 && (
               <MapCharacter 
                 characterSrc="/characters/Female_thinking.png"
-                position={{ left: "12", top: "350px" }}
+                position={{ left: "12", top: "250px" }}
               />
             )}
             
@@ -197,9 +197,9 @@ export default function ChapterGrid() {
               </>
             )}
             
-            {Array.from({ length: LEVELS_PER_CHAPTER }).map((_, levelIndex) => {
+            {Array.from({ length: chapter.levels || LEVELS_PER_CHAPTER }).map((_, levelIndex) => {
               const levelId = levelIndex + 1
-              const totalLevels = LEVELS_PER_CHAPTER
+              const totalLevels = chapter.levels || LEVELS_PER_CHAPTER
               const levelKey = `${chapter.id}-${levelId}`
 
               const isCompleted = completedLevels.has(levelKey)

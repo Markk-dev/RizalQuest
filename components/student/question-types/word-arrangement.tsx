@@ -92,7 +92,14 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
 
   const handleSubmit = async () => {
     playButtonSound()
-    const correct = JSON.stringify(selected) === JSON.stringify(question.correctOrder)
+    // Check if correctOrder is an array of arrays (multiple correct answers) or single array
+    const correctOrders = Array.isArray(question.correctOrder[0]) 
+      ? question.correctOrder 
+      : [question.correctOrder]
+    
+    const correct = correctOrders.some((order: string[]) => 
+      JSON.stringify(selected) === JSON.stringify(order)
+    )
     setIsCorrect(correct)
     setAnswered(true)
     

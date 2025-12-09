@@ -20,6 +20,7 @@ export default function LessonPage() {
   const [questions, setQuestions] = useState<any[]>([])
   const [hearts, setHearts] = useState(5)
   const [xp, setXp] = useState(0)
+  const [levelStartTime] = useState(Date.now())
 
   const chapter = CHAPTERS.find((c) => c.id === chapterId)
   const chapterData = storyline.chapters.find((c) => c.chapter === chapterId)
@@ -98,10 +99,11 @@ export default function LessonPage() {
       // Level completed! Save progress
       const levelKey = `${chapterId}-${levelId}`
       const saved = localStorage.getItem("completedLevels")
-      const completed = saved ? new Set(JSON.parse(saved)) : new Set()
+      const completed = saved ? new Set<string>(JSON.parse(saved)) : new Set<string>()
       
       // Check if this is the first time completing this level
       const isFirstTimeCompletion = !completed.has(levelKey)
+      console.log(`📊 Level ${levelKey} - First time: ${isFirstTimeCompletion}`)
       
       completed.add(levelKey)
       localStorage.setItem("completedLevels", JSON.stringify([...completed]))
@@ -126,18 +128,83 @@ export default function LessonPage() {
       // Check if this completes the platform (all 5 levels)
       const isLastLevel = levelId >= 5
       
-      // Award XP only when completing all 5 levels for the FIRST TIME (prevent XP farming)
-      if (isLastLevel && isFirstTimeCompletion) {
+      // Award XP for completing level (first time only)
+      if (isFirstTimeCompletion) {
+        console.log("🎉 First time completion! Awarding XP...")
         const user = JSON.parse(localStorage.getItem("user") || "{}")
-        const newXP = (user.xp || 0) + 20 // 20 XP per platform (5 levels)
+        // Levels 1-4 = 10 XP each, Level 5 (crown) = 60 XP
+        const xpReward = isLastLevel ? 60 : 10
+        const newXP = (user.xp || 0) + xpReward
+        console.log(`💰 XP: ${user.xp || 0} + ${xpReward} = ${newXP}`)
         user.xp = newXP
         localStorage.setItem("user", JSON.stringify(user))
         setXp(newXP)
         await syncXP(newXP).catch(console.error)
         
+        // Track daily XP
+        const today = new Date().toDateString()
+        const dailyXpData = JSON.parse(localStorage.getItem("dailyXP") || '{"date": "", "xp": 0}')
+        if (dailyXpData.date === today) {
+          dailyXpData.xp += xpReward
+        } else {
+          dailyXpData.date = today
+          dailyXpData.xp = xpReward
+        }
+        localStorage.setItem("dailyXP", JSON.stringify(dailyXpData))
+        
         // Dispatch event to update UI
         window.dispatchEvent(new CustomEvent("xpUpdated", { detail: { xp: newXP } }))
       }
+      
+      // Track daily levels completed
+      if (isFirstTimeCompletion) {
+        const today = new Date().toDateString()
+        const dailyLevelsData = JSON.parse(localStorage.getItem("dailyLevels") || '{"date": "", "count": 0}')
+        if (dailyLevelsData.date === today) {
+          dailyLevelsData.count += 1
+        } else {
+          dailyLevelsData.date = today
+          dailyLevelsData.count = 1
+        }
+        localStorage.setItem("dailyLevels", JSON.stringify(dailyLevelsData))
+      }
+      
+      // Track perfect level (no hearts lost) - works on ANY level, even replays
+      const user = JSON.parse(localStorage.getItem("user") || "{}")
+      const currentHearts = user.hearts ?? 5
+      if (currentHearts === hearts) {
+        // No hearts lost during this level
+        const today = new Date().toDateString()
+        const dailyPerfectData = JSON.parse(localStorage.getItem("dailyPerfect") || '{"date": "", "count": 0}')
+        if (dailyPerfectData.date === today) {
+          dailyPerfectData.count += 1
+        } else {
+          dailyPerfectData.date = today
+          dailyPerfectData.count = 1
+        }
+        localStorage.setItem("dailyPerfect", JSON.stringify(dailyPerfectData))
+      }
+      
+      // Track chapter completion (all 5 levels) - works on ANY chapter, even replays
+      if (isLastLevel) {
+        const today = new Date().toDateString()
+        const dailyChapterData = JSON.parse(localStorage.getItem("dailyChapter") || '{"date": "", "count": 0}')
+        if (dailyChapterData.date === today) {
+          dailyChapterData.count += 1
+        } else {
+          dailyChapterData.date = today
+          dailyChapterData.count = 1
+        }
+        localStorage.setItem("dailyChapter", JSON.stringify(dailyChapterData))
+      }
+
+      // Track completion time
+      const completionTime = Date.now() - levelStartTime
+      const timeData = JSON.parse(localStorage.getItem("levelTimes") || '{"times": [], "total": 0, "count": 0}')
+      timeData.times.push(completionTime)
+      timeData.total += completionTime
+      timeData.count += 1
+      localStorage.setItem("levelTimes", JSON.stringify(timeData))
 
       // Update current level to next
 
@@ -154,7 +221,7 @@ export default function LessonPage() {
         await syncCurrentProgress(
           nextChapter,
           nextLevel,
-          [...completed]
+          Array.from(completed)
         ).catch(console.error)
       }
 

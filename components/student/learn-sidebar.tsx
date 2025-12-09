@@ -175,12 +175,33 @@ export default function LearnSidebar() {
 
         <div className="space-y-6">
           {dailyQuests.map((quest, index) => {
+            const today = new Date().toDateString()
             let current = 0
+            
             if (quest.type === "xp") {
-              current = xp
+              // Get XP earned today only
+              const dailyXpData = JSON.parse(localStorage.getItem("dailyXP") || '{"date": "", "xp": 0}')
+              if (dailyXpData.date === today) {
+                current = dailyXpData.xp
+              }
             } else if (quest.type === "levels") {
-              const completedToday = JSON.parse(localStorage.getItem("completedLevelsToday") || "0")
-              current = completedToday
+              // Get levels completed today only
+              const dailyLevelsData = JSON.parse(localStorage.getItem("dailyLevels") || '{"date": "", "count": 0}')
+              if (dailyLevelsData.date === today) {
+                current = dailyLevelsData.count
+              }
+            } else if (quest.type === "perfect") {
+              // Get perfect levels completed today (can replay old levels)
+              const dailyPerfectData = JSON.parse(localStorage.getItem("dailyPerfect") || '{"date": "", "count": 0}')
+              if (dailyPerfectData.date === today) {
+                current = dailyPerfectData.count
+              }
+            } else if (quest.type === "chapter") {
+              // Get chapters completed today (can replay old chapters)
+              const dailyChapterData = JSON.parse(localStorage.getItem("dailyChapter") || '{"date": "", "count": 0}')
+              if (dailyChapterData.date === today) {
+                current = dailyChapterData.count
+              }
             }
             
             const progress = Math.min((current / quest.target) * 100, 100)

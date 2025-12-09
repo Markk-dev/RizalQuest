@@ -383,23 +383,229 @@ Options:
 CHAPTER 3: TRAVELS ABROAD
 ================================================================================
 
-NOTE: Chapter 3 currently uses AUTO-GENERATED questions from the storyline.
-Each level shows a sentence from the chapter story and asks:
-"What does this sentence tell us?"
-Options: About Rizal's life (CORRECT), About another person, About animals, About food
+-----LEVEL 1-------
+Q1: Where did Rizal first go after leaving the Philippines?
+Type: Multiple-Choice
+Options:
+Spain ✅ corrcet asnwer
+Germany
+France
+Philippines
 
-To add custom questions for Chapter 3, they need to be added to lib/questions.ts
+Q2: Rizal left the Philippines on a ___
+Type: Fill-in-Blanks
+Answer: ship
+
+Q3: What did Rizal buy instead of fancy things?
+Type: Typing
+Accepted Answers: books
+
+Q4: Name one language Rizal learned
+Type: Typing
+Accepted Answers: German / French
+
+
+-----LEVEL 2-------
+Q1: Match the place with Rizal’s activity
+Type: Matching
+
+Places:
+  Spain
+  Berlin
+
+Options:
+  Medical studies
+  Learned new languages
+  Hard work
+  Continued learning
+
+Correct Pairs:
+  Spain → Medical studies
+  Spain → Learned new languages
+  Berlin → Hard work
+  Berlin → Continued learning
+
+Q2: Who was Rizal’s European friend?
+Type: Typing
+Answer: Ferdinand Blumentritt
+
+Q3: Berlin is the capital of which country?
+Type: Fill-in-Blanks
+Answer: Germany
+
+Q4: Rizal learned new languages in Europe.
+Type: Classification
+Options:
+True
+False
+
+Correct: True
+
+-----LEVEL 3-------
+
+Q1: Rizal joined other Filipinos in the?
+Typing
+Asnwer: Propaganda Movement
+
+Q2: The Propaganda Movement sometimes call themselves the?
+typing:
+Answer: Indios Bravos
+
+Q3: Spell the name of Rizals name he met in Europe
+Answer: Ferdinand Blumentritt
+
+Q4: Rizal told his parents that he will left the Philippines
+Classification: True or false
+Answer: False
+
+
+-----LEVEL 4-------
+Q1: Rizal spent money on books
+Type: Classification
+Options: Correct / Incorrect
+Correct: Correct
+
+Q2: Group Rizal joined in Europe
+Type: Multiple-Choice
+Options:
+
+Indios Bravos ✅
+Katipunan
+Guardias
+Ilustrados
+
+Q3: __ was the Capital of Germany
+Type: Typing
+Accepted Answers: Berlin
+
+Q4: Trace Rizals Pony Alipato
+Drawing
+location: public > traceable > usman.png
+
+-----LEVEL 5-------
+Q2: Rizal realized Filipinos deserved
+Type: Multiple-Choice
+Options:
+  Fairness and respect ✅
+  Gold and power
+  Foreign rulers
+  Luxury life
+
+Q4: Rizal wanted to help his
+Type: Fill-in-Blanks
+Answer: country / Philippines / people / Mother
+
+Q5: Rizal met Professor Ferdinand Blumentritt in Berlin
+Classification
+True (Correct answer)
+False
 
 ================================================================================
 CHAPTER 4: NOLI ME TANGERE
 ================================================================================
 
-NOTE: Chapter 4 currently uses AUTO-GENERATED questions from the storyline.
-Each level shows a sentence from the chapter story and asks:
-"What does this sentence tell us?"
-Options: About Rizal's life (CORRECT), About another person, About animals, About food
+--------Level 1 ----------
+Q1: What did Rizal love to do?
+Type: Typing
+Accepted Answers: Writing / Stories / Poems
 
-To add custom questions for Chapter 4, they need to be added to lib/questions.ts
+Q2: Rizal used his ___ to show what Filipinos were feeling.
+Type: Fill-in-Blanks
+Answer: words
+
+Q3: Name one of Rizal’s books.
+Type: Typing
+Accepted Answers: Noli Me Tangere / El Filibusterismo
+
+Q4: How did Rizal share his message?
+Type: Multiple-Choice
+Options:
+  Writing ✅
+  Fighting
+  Singing
+  Traveling
+
+--------Level 2 ----------
+Q1. (Multiple-choice)
+What did Rizal’s books talk about?
+A. Law and Obligations
+B. Nature and Life itself
+C. Injustices and unfair treatment
+D. Mind and Behavior
+Answer: C
+
+Q2: Is Maria Clara based from one of Rizals novel?
+Classification
+True or False
+answer: True
+
+Q3. (Word-arrangement)
+Arrange the words to make a correct sentence:
+“used / message / Rizal / writing / his / share / to”
+Answer: Rizal used his writing to share his message.
+
+Q4: Spell the full name of Rizals great love
+Typing
+Answer: Leonor Rivera
+
+--------Level 3 ----------
+Q1: Name of the Hero from one of Rizals novel
+Typing
+Answer: Ibarra
+
+Q2: What the hero dreamed of building?
+Multiples choice
+Options: School, Market, House, Farmer
+answer School
+
+Q3: While living in Europe, Rizal began to write powerful stories about the Philippines
+Classification
+True or False
+answer: True
+
+Q4: Noli Me Tangere, means "Touch Me Not" in English
+Classification: True or false
+answer: true
+
+--------Level 4 ----------
+Q1: Which book talked about unfair treatment?
+Type: Multiple-Choice
+Options:
+  Noli Me Tangere
+  El Filibusterismo ✅
+  Mi último adiós
+  The Reign of Greed
+
+  answer: El Filibusterismo
+
+Q2: Multi-Input-Typing:
+Name two ways Rizal shared his ideas.
+Answers: Writing / Books / Poems / Stories
+
+
+Q3:He finished the Noli in Germany and later printed the Fili in Ghent, Belgium.
+Classification: true or false
+answer: true
+
+Q4: Match the right selection
+Type: Matching
+
+Places:
+  Noli Me Tangere
+  El Filibusterismo
+
+Options:
+  Fili in Ghent, Belgium
+  Maria Clara and Ibarra
+  social cancer
+  injustices 
+
+
+Correct Pairs:
+  Fili in Ghent, Belgium → Fili in Ghent, Belgium
+  Fili in Ghent, Belgium → Learned new languages
+  El Filibusterismo → social cancer
+  El Filibusterismo → injustices 
 
 ================================================================================
 CHAPTER 5: RETURN TO PHILIPPINES

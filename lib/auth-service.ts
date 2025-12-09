@@ -165,7 +165,7 @@ export async function getUserById(userId: string): Promise<User> {
     COLLECTIONS.USERS,
     userId
   )
-  return user as User
+  return user as unknown as User
 }
 
 // Get user progress
@@ -181,7 +181,7 @@ export async function getUserProgress(userId: string): Promise<UserProgress | nu
       return null
     }
 
-    return progress.documents[0] as UserProgress
+    return progress.documents[0] as unknown as UserProgress
   } catch (error) {
     return null
   }

@@ -48,9 +48,16 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
   }
 
   const handleSubmit = async () => {
-    const correct = question.blanks.every(
-      (blank, idx) => answers[idx]?.toLowerCase().trim() === blank.toLowerCase().trim(),
-    )
+    const correct = question.blanks.every((blank, idx) => {
+      const userAnswer = answers[idx]?.toLowerCase().trim()
+      // Check if blank is an array of accepted answers or a single answer
+      if (Array.isArray(blank)) {
+        return blank.some(acceptedAnswer => 
+          userAnswer === acceptedAnswer.toLowerCase().trim()
+        )
+      }
+      return userAnswer === blank.toLowerCase().trim()
+    })
     setIsCorrect(correct)
     setAnswered(true)
     
@@ -135,9 +142,16 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
                     placeholder="___"
                     className={`mx-2 px-4 py-2 border-2 border-b-4 rounded-lg text-center font-semibold min-w-32 focus:outline-none transition-all ${
                       answered
-                        ? answers[idx]?.toLowerCase().trim() === question.blanks[idx].toLowerCase().trim()
-                          ? "border-green-500 border-b-green-600 bg-green-50"
-                          : "border-red-500 border-b-red-600 bg-red-50"
+                        ? (() => {
+                            const userAnswer = answers[idx]?.toLowerCase().trim()
+                            const blank = question.blanks[idx]
+                            const isCorrect = Array.isArray(blank)
+                              ? blank.some(acceptedAnswer => userAnswer === acceptedAnswer.toLowerCase().trim())
+                              : userAnswer === blank.toLowerCase().trim()
+                            return isCorrect
+                              ? "border-green-500 border-b-green-600 bg-green-50"
+                              : "border-red-500 border-b-red-600 bg-red-50"
+                          })()
                         : "border-gray-300 border-b-gray-400 bg-white focus:border-green-500"
                     }`}
                   />

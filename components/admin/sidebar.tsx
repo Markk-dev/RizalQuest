@@ -2,22 +2,33 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { BarChart3, Users, BookOpen, Activity, Settings, LogOut } from "lucide-react"
+import { BarChart3, Users, BookOpen, Activity, LogOut } from "lucide-react"
+import { useState, useEffect } from "react"
 
 const MENU_ITEMS = [
   { label: "Dashboard", icon: BarChart3, href: "/admin" },
   { label: "Students", icon: Users, href: "/admin/students" },
   { label: "Levels", icon: BookOpen, href: "/admin/levels" },
   { label: "Analytics", icon: Activity, href: "/admin/analytics" },
-  { label: "Settings", icon: Settings, href: "/admin/settings" },
 ]
 
 export default function AdminSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const [userName, setUserName] = useState("Admin")
+  const [userRole, setUserRole] = useState("Manager")
+
+  useEffect(() => {
+    // Load user data from localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    if (user.fullName) setUserName(user.fullName)
+    if (user.username) setUserName(user.username)
+    if (user.role) setUserRole(user.role === "admin" ? "Administrator" : "Manager")
+  }, [])
 
   const handleLogout = () => {
     localStorage.removeItem("userRole")
+    localStorage.removeItem("user")
     router.push("/")
   }
 
@@ -37,7 +48,10 @@ export default function AdminSidebar() {
       <nav className="flex-1 space-y-2">
         {MENU_ITEMS.map((item) => {
           const Icon = item.icon
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
+          // For /admin route, only match exact path to avoid matching /admin/students etc.
+          const isActive = item.href === "/admin" 
+            ? pathname === "/admin"
+            : pathname === item.href || pathname.startsWith(item.href + "/")
 
           return (
             <Link key={item.href} href={item.href}>
@@ -58,11 +72,11 @@ export default function AdminSidebar() {
       <div className="space-y-3 pt-6 border-t border-gray-200">
         <div className="flex items-center gap-3 p-3 bg-gray-light rounded-lg">
           <div className="w-10 h-10 bg-gray-dark rounded-full flex items-center justify-center text-white font-bold">
-            A
+            {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 text-sm">
-            <p className="font-semibold text-black">Admin</p>
-            <p className="text-xs text-gray">Manager</p>
+            <p className="font-semibold text-black">{userName}</p>
+            <p className="text-xs text-gray">{userRole}</p>
           </div>
         </div>
 

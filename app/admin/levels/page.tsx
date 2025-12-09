@@ -2,15 +2,31 @@
 
 import { Edit, Trash2, Plus } from "lucide-react"
 import { CHAPTERS } from "@/lib/constants"
-
-const SAMPLE_LEVELS = [
-  { id: 1, chapterId: 1, levelNum: 1, topic: "Birth and Early Years", questions: 1, active: true },
-  { id: 2, chapterId: 1, levelNum: 2, topic: "Family Background", questions: 1, active: true },
-  { id: 3, chapterId: 2, levelNum: 1, topic: "Ateneo Education", questions: 1, active: true },
-  { id: 4, chapterId: 2, levelNum: 2, topic: "UST Years", questions: 1, active: true },
-]
+import { QUESTION_BANK } from "@/lib/questions"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AdminLevelsPage() {
+  const router = useRouter()
+  
+  // Generate levels from question bank
+  const getLevelsForChapter = (chapterId: number) => {
+    const chapterQuestions = QUESTION_BANK[chapterId as keyof typeof QUESTION_BANK]
+    if (!chapterQuestions) return []
+    
+    return Object.keys(chapterQuestions).map((levelKey) => {
+      const levelNum = parseInt(levelKey)
+      const questions = chapterQuestions[levelNum as keyof typeof chapterQuestions]
+      return {
+        id: `${chapterId}-${levelNum}`,
+        chapterId,
+        levelNum,
+        topic: `Level ${levelNum}`,
+        questions: Array.isArray(questions) ? questions.length : 0,
+        active: true,
+      }
+    })
+  }
   return (
     <div className="p-8">
       <div className="mb-8 flex items-center justify-between">
@@ -27,7 +43,7 @@ export default function AdminLevelsPage() {
       {/* Levels by Chapter */}
       <div className="space-y-8">
         {CHAPTERS.map((chapter) => {
-          const chapterLevels = SAMPLE_LEVELS.filter((l) => l.chapterId === chapter.id)
+          const chapterLevels = getLevelsForChapter(chapter.id)
           return (
             <div key={chapter.id} className="bg-white rounded-xl shadow-md overflow-hidden">
               <div
@@ -66,11 +82,12 @@ export default function AdminLevelsPage() {
                           </td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex items-center justify-center gap-2">
-                              <button className="p-2 hover:bg-gray-light rounded-lg transition-colors">
+                              <button 
+                                onClick={() => router.push(`/admin/levels/${chapter.id}/${level.levelNum}`)}
+                                className="p-2 hover:bg-gray-light rounded-lg transition-colors"
+                                title="Edit questions"
+                              >
                                 <Edit size={18} className="text-primary" />
-                              </button>
-                              <button className="p-2 hover:bg-gray-light rounded-lg transition-colors">
-                                <Trash2 size={18} className="text-red-600" />
                               </button>
                             </div>
                           </td>

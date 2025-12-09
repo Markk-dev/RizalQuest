@@ -116,7 +116,14 @@ export default function Drawing({ question, imageUrl, onAnswer, onNext }: Drawin
     setIsDrawing(false)
   }
 
+  const playButtonSound = () => {
+    const audio = new Audio('/sounds/platform_clicked.ogg')
+    audio.volume = 0.5
+    audio.play().catch((err) => console.log('Audio play failed:', err))
+  }
+
   const clearCanvas = () => {
+    playButtonSound()
     const canvas = canvasRef.current
     if (!canvas) return
     
@@ -131,6 +138,7 @@ export default function Drawing({ question, imageUrl, onAnswer, onNext }: Drawin
 
   const undoLastStroke = () => {
     if (strokes.length === 0) return
+    playButtonSound()
     
     const newStrokes = strokes.slice(0, -1)
     setStrokes(newStrokes)
@@ -148,6 +156,7 @@ export default function Drawing({ question, imageUrl, onAnswer, onNext }: Drawin
 
   const handleNext = () => {
     if (!hasDrawn) return
+    playButtonSound()
     
     // Mark as correct and proceed
     onAnswer({ isCorrect: true })
@@ -164,8 +173,8 @@ export default function Drawing({ question, imageUrl, onAnswer, onNext }: Drawin
           {/* Background image to trace */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <Image
-              src="/traceable/alipato.png"
-              alt="Alipato the dog"
+              src={imageUrl || "/traceable/alipato.png"}
+              alt="Trace image"
               width={600}
               height={600}
               className="opacity-30"

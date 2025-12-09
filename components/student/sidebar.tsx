@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { BookOpen, Award, Target, ShoppingBag, LogOut } from "lucide-react"
@@ -14,6 +15,14 @@ const MENU_ITEMS = [
 export default function StudentSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const [userName, setUserName] = useState("Student")
+  const [userUsername, setUserUsername] = useState("Level 1")
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    if (user.name) setUserName(user.name)
+    if (user.username) setUserUsername(user.username)
+  }, [])
 
   const playClickSound = () => {
     const audio = new Audio('/sounds/platform_clicked.ogg')
@@ -23,7 +32,15 @@ export default function StudentSidebar() {
 
   const handleLogout = () => {
     playClickSound()
+    // Clear all user-related data from localStorage
     localStorage.removeItem("userRole")
+    localStorage.removeItem("user")
+    localStorage.removeItem("completedLevels")
+    localStorage.removeItem("dailyXP")
+    localStorage.removeItem("dailyLevels")
+    localStorage.removeItem("dailyPerfect")
+    localStorage.removeItem("dailyChapter")
+    localStorage.removeItem("lastHeartRegenTime")
     router.push("/")
   }
 
@@ -65,11 +82,11 @@ export default function StudentSidebar() {
       <div className="space-y-3 pt-6 border-t border-gray-200">
         <div className="flex items-center gap-3 p-3 bg-gray-light rounded-lg">
           <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">
-            S
+            {userName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 text-sm">
-            <p className="font-semibold text-black">Student</p>
-            <p className="text-xs text-gray">Level 1</p>
+            <p className="font-semibold text-black">{userName}</p>
+            <p className="text-xs text-gray">{userUsername}</p>
           </div>
         </div>
 

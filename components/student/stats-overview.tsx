@@ -1,9 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { Activity, Zap, Flame, Target, TrendingUp, Calendar } from "lucide-react"
-import PerformanceChart from "./performance-chart"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 export default function StatsOverview() {
   // Sample student stats data
@@ -29,75 +27,33 @@ export default function StatsOverview() {
 
   return (
     <div className="space-y-8">
-      {/* Main Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-        <StatCard icon={Activity} label="Total Plays" value={stats.totalPlays} color="bg-blue-100 text-blue-600" />
-        <StatCard
-          icon={Target}
-          label="Success Rate"
-          value={`${stats.successRate}%`}
-          color="bg-green-100 text-green-600"
-        />
-        <StatCard icon={Flame} label="Streak" value={`${stats.currentStreak}d`} color="bg-red-100 text-red-600" />
-        <StatCard icon={Zap} label="Total XP" value={stats.totalXP} color="bg-yellow-100 text-yellow-600" />
-        <StatCard icon={Calendar} label="Avg Time" value={stats.averageTime} color="bg-purple-100 text-purple-600" />
-        <StatCard
-          icon={TrendingUp}
-          label="Chapters"
-          value={stats.chaptersCompleted}
-          color="bg-teal-100 text-teal-600"
-        />
+      {/* Performance by Chapter - Line Graph */}
+      <div className="bg-white rounded-xl border-2 border-b-4 border-gray-300 shadow-md p-6">
+        <h3 className="text-xl font-bold text-black mb-4">Performance by Chapter</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <LineChart data={performanceByChapter}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="chapter" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#fff', 
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px'
+              }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="accuracy" 
+              stroke="#22c55e" 
+              strokeWidth={3}
+              dot={{ fill: '#22c55e', r: 5 }}
+              activeDot={{ r: 7 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
 
-      {/* Performance by Chapter */}
-      <PerformanceChart data={performanceByChapter} />
-
-      {/* Weekly Activity */}
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h3 className="text-xl font-bold text-black mb-4">Weekly Activity</h3>
-        <div className="grid grid-cols-7 gap-2">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => {
-            const activity = (Math.random() * 100) | 0
-            return (
-              <div key={day} className="text-center">
-                <p className="text-xs text-gray mb-2">{day}</p>
-                <div className="h-24 bg-gray-light rounded-lg relative group cursor-pointer">
-                  <div
-                    className="absolute bottom-0 left-0 right-0 bg-primary rounded-b-lg transition-all duration-300 group-hover:opacity-80"
-                    style={{ height: `${activity}%` }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-xs font-bold text-white bg-black bg-opacity-50 px-2 py-1 rounded">
-                      {activity}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Achievements */}
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h3 className="text-xl font-bold text-black mb-4">Recent Achievements</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { icon: "🏆", title: "First Steps", desc: "Completed Chapter 1" },
-            { icon: "🔥", title: "7 Day Streak", desc: "Played for 7 consecutive days" },
-            { icon: "⭐", title: "50 XP Club", desc: "Earned 50 total XP" },
-          ].map((achievement, idx) => (
-            <div
-              key={idx}
-              className="border-2 border-primary rounded-lg p-4 text-center hover:bg-primary-light transition-colors"
-            >
-              <div className="text-4xl mb-2">{achievement.icon}</div>
-              <h4 className="font-bold text-black mb-1">{achievement.title}</h4>
-              <p className="text-sm text-gray">{achievement.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
