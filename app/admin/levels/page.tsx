@@ -1,6 +1,6 @@
 "use client"
 
-import { Edit, Trash2, Plus } from "lucide-react"
+import { Edit, Plus } from "lucide-react"
 import { CHAPTERS } from "@/lib/constants"
 import { QUESTION_BANK } from "@/lib/questions"
 import { useState } from "react"
@@ -8,6 +8,36 @@ import { useRouter } from "next/navigation"
 
 export default function AdminLevelsPage() {
   const router = useRouter()
+  const [syncing, setSyncing] = useState(false)
+  
+  const handleSyncQuestions = async () => {
+    if (!confirm("This will sync all questions from the code to the database. Continue?")) {
+      return
+    }
+    
+    setSyncing(true)
+    try {
+      console.log("Starting sync...")
+      const response = await fetch("/api/admin/sync-questions", {
+        method: "POST"
+      })
+      const data = await response.json()
+      
+      console.log("Sync response:", data)
+      
+      if (data.success) {
+        alert(`Questions synced successfully! ${data.count || 0} questions added.`)
+        window.location.reload() // Reload to show updated data
+      } else {
+        alert("Failed to sync questions: " + data.error)
+        console.error("Sync error:", data.error)
+      }
+    } catch (error) {
+      alert("Error syncing questions: " + error)
+      console.error("Sync exception:", error)
+    }
+    setSyncing(false)
+  }
   
   // Generate levels from question bank
   const getLevelsForChapter = (chapterId: number) => {
@@ -34,9 +64,13 @@ export default function AdminLevelsPage() {
           <h1 className="text-4xl font-bold text-black mb-2">Manage Levels</h1>
           <p className="text-gray">Create and edit learning levels</p>
         </div>
-        <button className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors flex items-center gap-2">
+        <button 
+          onClick={handleSyncQuestions}
+          disabled={syncing}
+          className="bg-blue-500 text-white px-6 py-3 rounded-xl border-2 border-blue-600 border-b-4 border-b-blue-700 font-semibold hover:bg-blue-600 transition-all active:border-b-2 flex items-center gap-2 disabled:opacity-50"
+        >
           <Plus size={20} />
-          New Level
+          {syncing ? "Syncing..." : "Sync Questions to DB"}
         </button>
       </div>
 

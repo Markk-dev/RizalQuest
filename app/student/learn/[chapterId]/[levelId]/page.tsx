@@ -6,6 +6,7 @@ import QuestionRenderer from "@/components/student/question-renderer"
 import QuizHeader from "@/components/student/quiz-header"
 import { CHAPTERS } from "@/lib/constants"
 import { getQuestionsForLevel } from "@/lib/questions"
+import { getQuestionsForChapterLevel } from "@/lib/question-service"
 import { syncHearts, syncXP, syncCompletedLevel, syncCurrentProgress, loadProgress } from "@/lib/progress-sync"
 import storyline from "@/storyline.json"
 
@@ -41,8 +42,16 @@ export default function LessonPage() {
       return
     }
     
-    const levelQuestions = getQuestionsForLevel(chapterId, levelId)
-    setQuestions(levelQuestions)
+    // Try to load from database first, fallback to local
+    getQuestionsForChapterLevel(chapterId, levelId).then((dbQuestions) => {
+      if (dbQuestions && dbQuestions.length > 0) {
+        setQuestions(dbQuestions)
+      } else {
+        // Fallback to local question bank
+        const levelQuestions = getQuestionsForLevel(chapterId, levelId)
+        setQuestions(levelQuestions)
+      }
+    })
     
     // Load progress from database
     loadProgress().then((progress) => {

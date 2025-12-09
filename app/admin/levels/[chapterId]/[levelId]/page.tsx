@@ -4,7 +4,8 @@ import { useParams, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { ArrowLeft, Save} from "lucide-react"
 import { CHAPTERS } from "@/lib/constants"
-import { getQuestionsForLevel } from "@/lib/questions"
+import { getQuestionsForChapterLevel } from "@/lib/question-service"
+import { toast } from "sonner"
 
 export default function EditLevelPage() {
   const params = useParams()
@@ -15,17 +16,64 @@ export default function EditLevelPage() {
   const chapter = CHAPTERS.find(c => c.id === chapterId)
   const [questions, setQuestions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    // Load questions from question bank
-    const levelQuestions = getQuestionsForLevel(chapterId, levelId)
-    setQuestions(levelQuestions || [])
-    setLoading(false)
+    loadQuestions()
   }, [chapterId, levelId])
 
+  const loadQuestions = async () => {
+    setLoading(true)
+    try {
+      // Try to load from database first
+      const dbQuestions = await getQuestionsForChapterLevel(chapterId, levelId)
+      
+      if (dbQuestions && dbQuestions.length > 0) {
+        setQuestions(dbQuestions)
+      } else {
+        // Fallback to local question bank
+        const { getQuestionsForLevel } = await import("@/lib/questions")
+        const localQuestions = getQuestionsForLevel(chapterId, levelId)
+        setQuestions(localQuestions || [])
+      }
+    } catch (error) {
+      console.error("Error loading questions:", error)
+      // Fallback to local on error
+      const { getQuestionsForLevel } = await import("@/lib/questions")
+      const localQuestions = getQuestionsForLevel(chapterId, levelId)
+      setQuestions(localQuestions || [])
+    }
+    setLoading(false)
+  }
+
   const handleSave = async () => {
-    // TODO: Implement save to database
-    alert("Save functionality will be implemented with database integration")
+    setSaving(true)
+    try {
+      let successCount = 0
+      for (const question of questions) {
+        if (question.$id) {
+          const response = await fetch("/api/admin/update-question", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              questionId: question.$id,
+              questionData: question
+            })
+          })
+          const data = await response.json()
+          if (data.success) {
+            successCount++
+          } else {
+            console.error("Failed to update question:", data.error)
+          }
+        }
+      }
+      toast.success(`${successCount} question(s) updated successfully!`)
+    } catch (error) {
+      toast.error("Failed to save questions")
+      console.error(error)
+    }
+    setSaving(false)
   }
 
   if (loading) {
@@ -52,10 +100,11 @@ export default function EditLevelPage() {
           </div>
           <button
             onClick={handleSave}
-            className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-green-600 border-b-4 border-b-green-700 font-semibold hover:bg-green-600 transition-all active:border-b-2 flex items-center gap-2"
+            disabled={saving}
+            className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-green-600 border-b-4 border-b-green-700 font-semibold hover:bg-green-600 transition-all active:border-b-2 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={20} />
-            Save Changes
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>

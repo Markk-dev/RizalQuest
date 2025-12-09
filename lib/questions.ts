@@ -2,7 +2,7 @@ import storyline from "@/storyline.json"
 
 // Question bank for each chapter
 // Each level has 5 questions based on the storyline sentences
-export const QUESTION_BANK = {
+const QUESTION_BANK = {
   1: {
     // Chapter 1: Childhood and Early Life
     1: [
@@ -582,7 +582,7 @@ export const QUESTION_BANK = {
   },
 }
 
-// Get questions for a specific chapter and level
+// Get questions for a specific chapter and level (from local bank)
 export function getQuestionsForLevel(chapterId: number, levelId: number) {
   const chapterQuestions = QUESTION_BANK[chapterId as keyof typeof QUESTION_BANK]
   if (!chapterQuestions) {
@@ -593,6 +593,9 @@ export function getQuestionsForLevel(chapterId: number, levelId: number) {
   const levelQuestions = chapterQuestions[levelId as keyof typeof chapterQuestions]
   return levelQuestions || getDefaultQuestions(chapterId, levelId)
 }
+
+// Export the question bank for syncing
+export { QUESTION_BANK }
 
 // Generate default questions from storyline
 function getDefaultQuestions(chapterId: number, levelId: number) {
