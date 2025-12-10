@@ -1,5 +1,5 @@
 import { databases, DATABASE_ID, COLLECTIONS, ID, Query } from "./appwrite"
-import { serverDatabases } from "./appwrite-server"
+import { getServerDatabases } from "./appwrite-server"
 
 export interface QuestionDocument {
   $id?: string
@@ -43,7 +43,7 @@ export async function updateQuestion(questionId: string, questionData: any, useS
     const { $id, chapterId, levelId, questionOrder, ...restData } = questionData
     
     if (useServerClient) {
-      await serverDatabases.updateDocument(
+      await getServerDatabases().updateDocument(
         DATABASE_ID,
         COLLECTIONS.QUESTIONS,
         questionId,
@@ -77,7 +77,7 @@ export async function createQuestion(questionData: QuestionDocument, useServerCl
     const { $id, ...data } = questionData
     
     if (useServerClient) {
-      await serverDatabases.createDocument(
+      await getServerDatabases().createDocument(
         DATABASE_ID,
         COLLECTIONS.QUESTIONS,
         ID.unique(),
@@ -128,7 +128,7 @@ export async function syncQuestionBankToDatabase(questionBank: any) {
         console.log(`Processing chapter ${chapterId}, level ${levelId}`)
         
         // Check if questions already exist (use server client for consistency)
-        const existing = await serverDatabases.listDocuments(
+        const existing = await getServerDatabases().listDocuments(
           DATABASE_ID,
           COLLECTIONS.QUESTIONS,
           [

@@ -1,11 +1,28 @@
 import { Client, Databases, ID, Query } from "node-appwrite"
 
-const client = new Client()
-  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-  .setKey(process.env.NEXT_PUBLIC_APPWRITE_API!) // API key for server-side operations
+let _serverDatabases: Databases | null = null
 
-export const serverDatabases = new Databases(client)
+// Lazy initialization to avoid build-time issues
+export function getServerDatabases(): Databases {
+  if (!_serverDatabases) {
+    const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT
+    const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID
+    const apiKey = process.env.NEXT_PUBLIC_APPWRITE_API
+    
+    if (!endpoint || !projectId || !apiKey) {
+      throw new Error("Missing Appwrite environment variables")
+    }
+    
+    const client = new Client()
+      .setEndpoint(endpoint)
+      .setProject(projectId)
+      .setKey(apiKey)
+    
+    _serverDatabases = new Databases(client)
+  }
+  
+  return _serverDatabases
+}
 
 export const DATABASE_ID = "rizal-quest-db"
 export const COLLECTIONS = {
