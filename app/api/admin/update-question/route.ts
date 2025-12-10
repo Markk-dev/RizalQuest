@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { updateQuestion } from "@/lib/question-service"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const { questionId, questionData } = await request.json()

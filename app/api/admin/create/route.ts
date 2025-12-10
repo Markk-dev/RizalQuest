@@ -3,6 +3,9 @@ import { getServerDatabases } from "@/lib/appwrite-server"
 import { DATABASE_ID, COLLECTIONS, ID } from "@/lib/appwrite"
 import bcrypt from "bcryptjs"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export async function POST() {
   try {
     const hashedPassword = await bcrypt.hash("admin123", 10)

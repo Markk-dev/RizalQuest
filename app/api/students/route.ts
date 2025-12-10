@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { getServerDatabases } from "@/lib/appwrite-server"
 import { DATABASE_ID, COLLECTIONS, Query } from "@/lib/appwrite"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     // Fetch all students

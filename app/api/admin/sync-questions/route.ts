@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { syncQuestionBankToDatabase } from "@/lib/question-service"
 import { getQuestionBank } from "@/lib/get-question-bank"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export async function POST() {
   try {
     const QUESTION_BANK = getQuestionBank()
