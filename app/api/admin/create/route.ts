@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server"
-import { databases, DATABASE_ID, COLLECTIONS, ID } from "@/lib/appwrite"
+import { getServerDatabases } from "@/lib/appwrite-server"
+import { DATABASE_ID, COLLECTIONS, ID } from "@/lib/appwrite"
 import bcrypt from "bcryptjs"
 
 export async function POST() {
   try {
     const hashedPassword = await bcrypt.hash("admin123", 10)
     
-    const admin = await databases.createDocument(
+    const admin = await getServerDatabases().createDocument(
       DATABASE_ID,
       COLLECTIONS.USERS,
       ID.unique(),
