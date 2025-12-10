@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
-import { databases, DATABASE_ID, COLLECTIONS, Query } from "@/lib/appwrite"
+import { getServerDatabases } from "@/lib/appwrite-server"
+import { DATABASE_ID, COLLECTIONS, Query } from "@/lib/appwrite"
 
 export async function GET() {
   try {
     // Fetch all students
-    const studentsResponse = await databases.listDocuments(
+    const studentsResponse = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USERS,
       [Query.equal("role", "student"), Query.limit(100)]
@@ -13,7 +14,7 @@ export async function GET() {
     const students = studentsResponse.documents
     
     // Fetch all progress
-    const progressResponse = await databases.listDocuments(
+    const progressResponse = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USER_PROGRESS,
       [Query.limit(100)]
@@ -70,7 +71,7 @@ export async function PATCH(request: Request) {
     }
 
     // Check if username is already taken by another user
-    const existingUsers = await databases.listDocuments(
+    const existingUsers = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USERS,
       [Query.equal("username", username)]
@@ -81,7 +82,7 @@ export async function PATCH(request: Request) {
     }
 
     // Update the user
-    await databases.updateDocument(
+    await getServerDatabases().updateDocument(
       DATABASE_ID,
       COLLECTIONS.USERS,
       studentId,
@@ -107,18 +108,18 @@ export async function DELETE(request: Request) {
     }
     
     // Delete user progress first
-    const progressResponse = await databases.listDocuments(
+    const progressResponse = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USER_PROGRESS,
       [Query.equal("userId", studentId)]
     )
     
     for (const progress of progressResponse.documents) {
-      await databases.deleteDocument(DATABASE_ID, COLLECTIONS.USER_PROGRESS, progress.$id)
+      await getServerDatabases().deleteDocument(DATABASE_ID, COLLECTIONS.USER_PROGRESS, progress.$id)
     }
     
     // Delete the user
-    await databases.deleteDocument(DATABASE_ID, COLLECTIONS.USERS, studentId)
+    await getServerDatabases().deleteDocument(DATABASE_ID, COLLECTIONS.USERS, studentId)
     
     return NextResponse.json({ success: true })
   } catch (error: any) {

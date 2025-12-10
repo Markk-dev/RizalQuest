@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
-import { databases, DATABASE_ID, COLLECTIONS, Query } from "@/lib/appwrite"
+import { getServerDatabases } from "@/lib/appwrite-server"
+import { DATABASE_ID, COLLECTIONS, Query } from "@/lib/appwrite"
 
 export async function GET() {
   try {
     // Fetch all students
-    const studentsResponse = await databases.listDocuments(
+    const studentsResponse = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USERS,
       [Query.equal("role", "student"), Query.limit(100)]
@@ -13,7 +14,7 @@ export async function GET() {
     const students = studentsResponse.documents
     
     // Fetch all progress
-    const progressResponse = await databases.listDocuments(
+    const progressResponse = await getServerDatabases().listDocuments(
       DATABASE_ID,
       COLLECTIONS.USER_PROGRESS,
       [Query.limit(100)]
