@@ -41,17 +41,28 @@ export async function getQuestionsForChapterLevel(chapterId: number, levelId: nu
 export async function updateQuestion(questionId: string, questionData: any, useServerClient = false) {
   try {
     const { $id, chapterId, levelId, questionOrder, ...restData } = questionData
-    const dbClient = useServerClient ? serverDatabases : databases
     
-    await dbClient.updateDocument(
-      DATABASE_ID,
-      COLLECTIONS.QUESTIONS,
-      questionId,
-      {
-        question: questionData.question,
-        questionData: JSON.stringify(restData)
-      }
-    )
+    if (useServerClient) {
+      await serverDatabases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.QUESTIONS,
+        questionId,
+        {
+          question: questionData.question,
+          questionData: JSON.stringify(restData)
+        }
+      )
+    } else {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.QUESTIONS,
+        questionId,
+        {
+          question: questionData.question,
+          questionData: JSON.stringify(restData)
+        }
+      )
+    }
     
     return { success: true }
   } catch (error: any) {
@@ -64,21 +75,36 @@ export async function updateQuestion(questionId: string, questionData: any, useS
 export async function createQuestion(questionData: QuestionDocument, useServerClient = false) {
   try {
     const { $id, ...data } = questionData
-    const dbClient = useServerClient ? serverDatabases : databases
     
-    await dbClient.createDocument(
-      DATABASE_ID,
-      COLLECTIONS.QUESTIONS,
-      ID.unique(),
-      {
-        chapterId: data.chapterId,
-        levelId: data.levelId,
-        questionOrder: data.questionOrder,
-        type: data.type,
-        question: data.question,
-        questionData: data.questionData
-      }
-    )
+    if (useServerClient) {
+      await serverDatabases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.QUESTIONS,
+        ID.unique(),
+        {
+          chapterId: data.chapterId,
+          levelId: data.levelId,
+          questionOrder: data.questionOrder,
+          type: data.type,
+          question: data.question,
+          questionData: data.questionData
+        }
+      )
+    } else {
+      await databases.createDocument(
+        DATABASE_ID,
+        COLLECTIONS.QUESTIONS,
+        ID.unique(),
+        {
+          chapterId: data.chapterId,
+          levelId: data.levelId,
+          questionOrder: data.questionOrder,
+          type: data.type,
+          question: data.question,
+          questionData: data.questionData
+        }
+      )
+    }
     
     return { success: true }
   } catch (error: any) {

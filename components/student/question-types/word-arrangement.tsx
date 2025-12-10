@@ -93,9 +93,15 @@ export default function WordArrangement({ question, onAnswer, onNext }: WordArra
   const handleSubmit = async () => {
     playButtonSound()
     // Check if correctOrder is an array of arrays (multiple correct answers) or single array
-    const correctOrders = Array.isArray(question.correctOrder[0]) 
-      ? question.correctOrder 
-      : [question.correctOrder]
+    let correctOrders: string[][]
+    
+    if (Array.isArray(question.correctOrder[0])) {
+      // It's an array of arrays
+      correctOrders = question.correctOrder as unknown as string[][]
+    } else {
+      // It's a single array
+      correctOrders = [question.correctOrder as unknown as string[]]
+    }
     
     const correct = correctOrders.some((order: string[]) => 
       JSON.stringify(selected) === JSON.stringify(order)
