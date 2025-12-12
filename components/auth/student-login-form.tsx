@@ -46,7 +46,15 @@ export function StudentLoginForm({
         router.push("/admin/dashboard")
       }
     } catch (err: any) {
-      setError(err.message || "Login failed")
+      // Check if it's a network/fetch error
+      const errorMessage = err.message || "Login failed"
+      
+      if (errorMessage.includes("Failed to fetch") || errorMessage.includes("fetch")) {
+        setError("Cannot connect to server. Please check your internet connection or try again later.")
+      } else {
+        setError(errorMessage)
+      }
+      
       setIsLoading(false)
     }
   }

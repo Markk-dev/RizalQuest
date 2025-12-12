@@ -707,7 +707,7 @@ const QUESTION_BANK = {
         type: "spelling",
         question: "Spell the word that means 'supporting a cause or policy' (starts with A)",
         correctAnswer: "advocacy",
-        acceptedAnswers: ["advocacy", "Advocacy", "ADVOCACY"]
+        acceptedAnswers: ["advocacy", " ", "ADVOCACY"]
       },
       {
         type: "multi-input-typing",
@@ -715,6 +715,417 @@ const QUESTION_BANK = {
         correctAnswers: "reading,traveling,education,seeing freedom,Reading,Traveling,Education,Seeing Freedom,READING,TRAVELING,EDUCATION,SEEING FREEDOM",
         inputCount: 2,
         placeholder: "Type one way..."
+      },
+    ],
+  },
+  6: {
+    // Chapter 6: Return to the Philippines
+    1: [
+      {
+        type: "multiple-choice",
+        question: "It was safe for Rizal to return to the Philippines.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What town was Rizal sent to by the Spanish government?",
+        correctAnswer: "Dapitan",
+        acceptedAnswers: ["Dapitan", "dapitan", "DAPITAN"]
+      },
+      {
+        type: "multiple-choice",
+        question: "What did Rizal win that helped him buy land?",
+        options: ["A contest", "The lottery", "A prize", "A scholarship"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What did Rizal build to bring clean water to the town?",
+        correctAnswer: "waterworks",
+        acceptedAnswers: ["waterworks", "Waterworks", "WATERWORKS", "water works", "Water works", "WATER WORKS"]
+      },
+    ],
+    2: [
+      {
+        type: "multiple-choice",
+        question: "Rizal gave up when he was sent to Dapitan.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What did Rizal make to light the streets at night?",
+        correctAnswer: "coconut oil lamps",
+        acceptedAnswers: ["coconut oil lamps", "Coconut oil lamps", "COCONUT OIL LAMPS", "lamps", "Lamps", "LAMPS", "oil lamps", "Oil lamps", "OIL LAMPS"]
+      },
+      {
+        type: "multiple-choice",
+        question: "How did students pay Rizal for their education?",
+        options: ["With money", "By helping with work", "With food", "They didn't pay"],
+        correct: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal opened a free school for:",
+        options: ["Girls", "Boys", "Adults", "Everyone"],
+        correct: 1,
+      },
+    ],
+    3: [
+      {
+        type: "typing",
+        question: "What giant map did Rizal make on the ground using stones?",
+        correctAnswer: "Mindanao",
+        acceptedAnswers: ["Mindanao", "mindanao", "MINDANAO"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal worked as a doctor in Dapitan.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "Whose eyes did Rizal operate on?",
+        correctAnswer: "his mother",
+        acceptedAnswers: ["his mother", "His mother", "HIS MOTHER", "mother", "Mother", "MOTHER", "his mother's", "His mother's"]
+      },
+      {
+        type: "multiple-choice",
+        question: "What did Rizal study to become?",
+        options: ["A lawyer", "An eye doctor", "A teacher", "An engineer"],
+        correct: 1,
+      },
+    ],
+    4: [
+      {
+        type: "typing",
+        question: "What flying lizard did Rizal discover? (Draco ___)",
+        correctAnswer: "rizali",
+        acceptedAnswers: ["rizali", "Rizali", "RIZALI"]
+      },
+      {
+        type: "typing",
+        question: "Who became Rizal's wife in Dapitan?",
+        correctAnswer: "Josephine Bracken",
+        acceptedAnswers: ["Josephine Bracken", "josephine bracken", "JOSEPHINE BRACKEN", "Josephine", "josephine", "JOSEPHINE"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal's mother and sisters came to live with him in Dapitan.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "multiple-choice",
+        question: "How did the people of Dapitan feel about Rizal?",
+        options: ["They feared him", "They admired his kindness", "They ignored him", "They disliked him"],
+        correct: 1,
+      },
+    ],
+    5: [
+      {
+        type: "matching",
+        question: "Match Rizal's activities in Dapitan:",
+        pairs: [
+          { left: "Built waterworks", right: "Clean water for town" },
+          { left: "Made coconut oil lamps", right: "Light for streets" },
+          { left: "Opened free school", right: "Taught boys skills" },
+          { left: "Worked as doctor", right: "Operated on mother's eyes" }
+        ]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal lived simply in Dapitan.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "What childhood skill did Rizal show by making clay figures and the Mindanao map?",
+        correctAnswer: "art",
+        acceptedAnswers: ["art", "Art", "ART", "his love for art", "His love for art", "love for art"]
+      },
+      {
+        type: "multiple-choice",
+        question: "In Dapitan, Rizal showed he was:",
+        options: ["Selfish", "Lazy", "Kind and hardworking", "Angry"],
+        correct: 2,
+      },
+    ],
+  },
+  7: {
+    // Chapter 7: Trial and Imprisonment
+    1: [
+      {
+        type: "multiple-choice",
+        question: "Why were the Spanish authorities afraid of Rizal?",
+        options: ["His personality", "His ideas", "His family", "His travels"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What prison was Rizal put in?",
+        correctAnswer: "Fort Santiago",
+        acceptedAnswers: ["Fort Santiago", "fort santiago", "FORT SANTIAGO", "Fort santiago"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal was arrested because of his writings and beliefs.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "Where was Fort Santiago located?",
+        correctAnswer: "Manila",
+        acceptedAnswers: ["Manila", "manila", "MANILA"]
+      },
+    ],
+    2: [
+      {
+        type: "multiple-choice",
+        question: "What did the Spanish authorities accuse Rizal of starting?",
+        options: ["A school", "A rebellion", "A newspaper", "A business"],
+        correct: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal always wanted peaceful reform.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "How did Rizal act during his trial?",
+        correctAnswer: "calm and brave",
+        acceptedAnswers: ["calm and brave", "Calm and brave", "CALM AND BRAVE", "calm", "Calm", "CALM", "brave", "Brave", "BRAVE"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal showed the same discipline he had as a:",
+        options: ["Child", "Student", "Doctor", "Writer"],
+        correct: 1,
+      },
+    ],
+    3: [
+      {
+        type: "typing",
+        question: "What did Rizal continue to do inside his jail cell?",
+        correctAnswer: "write",
+        acceptedAnswers: ["write", "Write", "WRITE", "writing", "Writing", "WRITING"]
+      },
+      {
+        type: "typing",
+        question: "What is the title of Rizal's last poem in Spanish? (Mi Último ___)",
+        correctAnswer: "Adiós",
+        acceptedAnswers: ["Adiós", "adios", "ADIOS", "Adios", "adiós", "ADIÓS"]
+      },
+      {
+        type: "multiple-choice",
+        question: "What does 'Mi Último Adiós' mean in English?",
+        options: ["My Last Hope", "My Last Farewell", "My Last Letter", "My Last Dream"],
+        correct: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal's last poem was filled with love for his country.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+    ],
+    4: [
+      {
+        type: "typing",
+        question: "Where did Rizal hide his last poem?",
+        correctAnswer: "alcohol lamp",
+        acceptedAnswers: ["alcohol lamp", "Alcohol lamp", "ALCOHOL LAMP", "lamp", "Lamp", "LAMP", "an alcohol lamp", "An alcohol lamp"]
+      },
+      {
+        type: "typing",
+        question: "Which sister did Rizal give the lamp to?",
+        correctAnswer: "Trinidad",
+        acceptedAnswers: ["Trinidad", "trinidad", "TRINIDAD"]
+      },
+      {
+        type: "multiple-choice",
+        question: "The guards found Rizal's hidden poem.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What term did Rizal use in his poem for the problems hurting the land?",
+        correctAnswer: "social cancer",
+        acceptedAnswers: ["social cancer", "Social cancer", "SOCIAL CANCER", "Social Cancer"]
+      },
+    ],
+    5: [
+      {
+        type: "matching",
+        question: "Match the details about Rizal's imprisonment:",
+        pairs: [
+          { left: "Fort Santiago", right: "Prison in Manila" },
+          { left: "Mi Último Adiós", right: "Last poem" },
+          { left: "Trinidad", right: "Sister who received lamp" },
+          { left: "Alcohol lamp", right: "Hiding place for poem" }
+        ]
+      },
+      {
+        type: "multiple-choice",
+        question: "Even in his darkest days, Rizal accepted his fate with:",
+        options: ["Anger", "Courage and hope", "Fear", "Sadness"],
+        correct: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal had faith in his people even in prison.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "What three things did Rizal's last poem express love for?",
+        correctAnswer: "country",
+        acceptedAnswers: ["country", "Country", "COUNTRY", "his country", "His country", "parents", "Parents", "PARENTS", "people", "People", "PEOPLE"]
+      },
+    ],
+  },
+  8: {
+    // Chapter 8: Execution and Legacy
+    1: [
+      {
+        type: "typing",
+        question: "On what date was Rizal executed?",
+        correctAnswer: "December 30, 1896",
+        acceptedAnswers: ["December 30, 1896", "december 30, 1896", "DECEMBER 30, 1896", "December 30 1896", "december 30 1896"]
+      },
+      {
+        type: "typing",
+        question: "What is the old name of Rizal Park?",
+        correctAnswer: "Bagumbayan",
+        acceptedAnswers: ["Bagumbayan", "bagumbayan", "BAGUMBAYAN"]
+      },
+      {
+        type: "multiple-choice",
+        question: "What is another name for Rizal Park?",
+        options: ["Luneta", "Manila Bay", "Fort Santiago", "Intramuros"],
+        correct: 0,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal was executed by firing squad.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+    ],
+    2: [
+      {
+        type: "multiple-choice",
+        question: "Why did Rizal ask not to be shot in the back?",
+        options: ["He was afraid", "He was not a traitor", "He wanted to run", "He was tired"],
+        correct: 1,
+      },
+      {
+        type: "multiple-choice",
+        question: "When the shots were fired, how did Rizal fall?",
+        options: ["On his back", "On his side", "Facing the sky", "Face down"],
+        correct: 2,
+      },
+      {
+        type: "typing",
+        question: "What were Rizal's last words? (Consummatum ___)",
+        correctAnswer: "est",
+        acceptedAnswers: ["est", "Est", "EST"]
+      },
+      {
+        type: "typing",
+        question: "What does 'Consummatum est' mean in English?",
+        correctAnswer: "It is finished",
+        acceptedAnswers: ["It is finished", "it is finished", "IT IS FINISHED", "It is done", "it is done"]
+      },
+    ],
+    3: [
+      {
+        type: "multiple-choice",
+        question: "How did Filipinos feel when they heard of Rizal's death?",
+        options: ["Happy", "Angry", "Wept but inspired", "Confused"],
+        correct: 2,
+      },
+      {
+        type: "typing",
+        question: "Where was Rizal from as a boy?",
+        correctAnswer: "Calamba",
+        acceptedAnswers: ["Calamba", "calamba", "CALAMBA"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal wrote that the youth are the hope of the:",
+        options: ["World", "Fatherland", "Future", "Country"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "Name one of Rizal's famous novels (Noli Me Tangere or El Filibusterismo)",
+        correctAnswer: "Noli Me Tangere",
+        acceptedAnswers: ["Noli Me Tangere", "noli me tangere", "NOLI ME TANGERE", "El Filibusterismo", "el filibusterismo", "EL FILIBUSTERISMO", "Noli", "noli", "NOLI", "Fili", "fili", "FILI"]
+      },
+    ],
+    4: [
+      {
+        type: "multiple-choice",
+        question: "Rizal's death awakened the spirit of the nation.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "What did Rizal's death help lead to?",
+        correctAnswer: "independence",
+        acceptedAnswers: ["independence", "Independence", "INDEPENDENCE", "Philippines independence", "Philippine independence", "the Philippines' independence"]
+      },
+      {
+        type: "multiple-choice",
+        question: "Where does Rizal's monument stand today?",
+        options: ["Fort Santiago", "Dapitan", "Rizal Park", "Calamba"],
+        correct: 2,
+      },
+      {
+        type: "typing",
+        question: "What two things are on Rizal's monument that symbolize his ideas?",
+        correctAnswer: "book and torch",
+        acceptedAnswers: ["book and torch", "Book and torch", "BOOK AND TORCH", "book", "Book", "BOOK", "torch", "Torch", "TORCH", "a book and a torch"]
+      },
+    ],
+    5: [
+      {
+        type: "matching",
+        question: "Match Rizal's life stages with his contributions:",
+        pairs: [
+          { left: "Boy from Calamba", right: "Curious and loved learning" },
+          { left: "Student", right: "Youth are hope of fatherland" },
+          { left: "Writer", right: "Noli Me Tangere and El Fili" },
+          { left: "In Dapitan", right: "Doctor and teacher" }
+        ]
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal is honored as a:",
+        options: ["National hero", "King", "President", "General"],
+        correct: 0,
+      },
+      {
+        type: "multiple-choice",
+        question: "Rizal's story continues to guide children and adults today.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "What quality did Rizal show when he turned and fell facing the sky?",
+        correctAnswer: "bravery",
+        acceptedAnswers: ["bravery", "Bravery", "BRAVERY", "courage", "Courage", "COURAGE", "brave", "Brave", "BRAVE"]
       },
     ],
   },
