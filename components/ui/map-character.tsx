@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface MapCharacterProps {
   characterSrc: string
@@ -31,11 +31,26 @@ export function MapCharacter({
   shadowConfig = {}
 }: MapCharacterProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   const positionStyle = {
     top: position.top,
-    ...(position.right && { right: `${Number(position.right) * 4}px` }),
-    ...(position.left && { left: `${Number(position.left) * 4}px` }),
+    ...(position.right && { 
+      right: isMobile ? '2%' : `${Number(position.right) * 4}px` 
+    }),
+    ...(position.left && { 
+      left: isMobile ? '2%' : `${Number(position.left) * 4}px` 
+    }),
   }
   
   const defaultShadow = {
@@ -51,7 +66,7 @@ export function MapCharacter({
   
   return (
     <div 
-      className="absolute z-10 pointer-events-auto cursor-pointer" 
+      className={`absolute z-10 pointer-events-auto cursor-pointer ${isMobile ? 'hidden' : 'block'}`}
       style={positionStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -26,7 +26,7 @@ export default function ChapterPlatform({
   return (
     <Link href={`/student/learn/${chapterId}/${levelIndex}`}>
       <div
-        className={`relative group cursor-pointer my-8 flex justify-center transition-transform duration-300 ${
+        className={`relative group cursor-pointer my-8 flex justify-center transition-transform duration-300 z-20 ${
           isEven ? "mr-24" : "ml-24"
         }`}
         onMouseEnter={() => setIsHovered(true)}
