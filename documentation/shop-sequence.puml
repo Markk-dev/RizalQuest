@@ -1,0 +1,28 @@
+@startuml Shop System Sequence
+
+participant Student
+participant System
+participant Database
+
+Student -> System: Access Shop
+System -> Database: Load Shop Items
+Database --> System: Available Items
+System --> Student: Browse Available Items
+
+Student -> System: Select Item to Purchase
+System -> Database: Check Student XP Balance
+Database --> System: Current XP Balance
+System -> System: Validate Sufficient XP
+
+alt Sufficient XP
+    System -> System: Process Purchase
+    System -> Database: Deduct XP from Balance
+    System -> Database: Add Item to Student Inventory
+    Database --> System: Transaction Complete
+    System --> Student: Receive Purchase Confirmation
+    Student -> Student: View Updated XP Balance
+else Insufficient XP
+    System --> Student: Show Insufficient XP Error
+end
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml Shop System
+
+|Student|
+start
+:Access Shop;
+
+|Database|
+:Load Shop Items;
+:Check Student XP Balance;
+
+|Student|
+:Browse Available Items;
+:Select Item to Purchase;
+
+|System|
+if (Sufficient XP?) then (yes)
+  :Process Purchase;
+else (no)
+  :Show Insufficient XP Error;
+endif
+
+|Database|
+:Deduct XP from Balance;
+:Add Item to Student Inventory;
+
+|System|
+if (Item Type = Hearts?) then (yes)
+  :Refill Student Hearts;
+else (no)
+  :Apply Item Effect;
+endif
+
+|Student|
+:Receive Purchase Confirmation;
+:View Updated XP Balance;
+
+stop
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml Student Learning Process
+
+|Student|
+start
+:Select Chapter;
+:Start Level;
+
+|Student|
+:Answer Question;
+
+|System|
+:Validate Answer;
+if (Correct?) then (yes)
+  :Award XP;
+else (no)
+  :Deduct Heart;
+endif
+
+|System|
+if (Level Complete?) then (yes)
+  :Show Results;
+else (no)
+  :Next Question;
+endif
+
+|Student|
+:View Progress;
+stop
+
+@enduml

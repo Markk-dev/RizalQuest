@@ -1,0 +1,25 @@
+@startuml Admin Dashboard Sequence
+
+participant Admin
+participant Database
+
+Admin -> Database: Login
+Database --> Admin: Authentication Success
+
+Admin -> Database: Request Analytics Data
+Database --> Admin: Fetch Analytics Data
+Admin -> Admin: View Dashboard Analytics
+
+Admin -> Admin: Monitor Student Progress
+
+Admin -> Database: Request Student Data
+Database --> Admin: Return Student Accounts
+Admin -> Admin: Manage Student Accounts
+
+Admin -> Database: Save Quest Data
+Database --> Admin: Quest Saved
+Admin -> Admin: Create/Update Quests
+
+Admin -> Admin: Review Class Performance
+
+@enduml

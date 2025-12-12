@@ -1,0 +1,21 @@
+@startuml Rizal Quest Deployment Diagram
+
+node "Client Browser" {
+    [Web Application]
+}
+
+node "Vercel Cloud" {
+    [Next.js App]
+}
+
+node "Appwrite Cloud" {
+    [Database]
+    [Authentication]
+}
+
+' Connections
+[Web Application] --> [Next.js App] : HTTPS
+[Next.js App] --> [Database] : Queries
+[Next.js App] --> [Authentication] : Auth
+
+@enduml

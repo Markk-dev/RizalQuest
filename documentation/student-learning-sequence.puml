@@ -1,0 +1,31 @@
+@startuml Student Learning Sequence
+
+participant Student
+participant System
+participant Database
+
+Student -> System: Login
+System -> Database: Authenticate User
+Database --> System: User Verified
+System --> Student: Login Success
+
+Student -> System: Choose Chapter
+System -> Database: Load Chapter Data
+Database --> System: Chapter Questions
+System --> Student: Display Level
+
+Student -> System: Submit Answer
+System -> System: Validate Answer
+
+alt Answer Correct (passes)
+    System -> Database: Update Progress
+    System -> Database: Award XP
+    Database --> System: Progress Saved
+    System --> Student: Advance to Next Level
+else Answer Incorrect (retries)
+    System -> Database: Deduct Heart
+    Database --> System: Hearts Updated
+    System --> Student: Retry Current Level
+end
+
+@enduml

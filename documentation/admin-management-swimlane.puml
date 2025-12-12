@@ -1,0 +1,35 @@
+@startuml Admin Management Process
+
+|Admin|
+start
+:Login to Dashboard;
+
+|System|
+:Load Real-time Stats;
+:Display Analytics Charts;
+
+|Admin|
+:View Student Performance;
+
+|Database|
+:Fetch Student Data;
+:Retrieve Progress Stats;
+
+|System|
+:Generate Performance Reports;
+:Show Top Students;
+
+|Admin|
+:Manage Student Account;
+
+|Database|
+:Update Student Info;
+
+|System|
+:Refresh Student List;
+
+|Admin|
+:Monitor Learning Progress;
+stop
+
+@enduml

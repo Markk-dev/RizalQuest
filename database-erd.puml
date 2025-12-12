@@ -1,0 +1,70 @@
+@startuml Rizal Quest Database ERD
+
+entity "Users" as users {
+  * $id : string
+  --
+  * username : string
+  * password : string
+  * role : enum
+  fullName : string
+  hearts : integer
+  xp : integer
+  completedLevels : string
+  lastHeartUpdate : datetime
+}
+
+entity "User Progress" as user_progress {
+  * $id : string
+  --
+  * userId : string
+  * currentChapter : integer
+  * currentLevel : integer
+  completedLevels : string
+}
+
+entity "Quests" as quests {
+  * $id : string
+  --
+  * title : string
+  * targetXP : integer
+  * rewardXP : integer
+  isActive : boolean
+}
+
+entity "User Quests" as user_quests {
+  * $id : string
+  --
+  * userId : string
+  * questId : string
+  currentProgress : integer
+  isCompleted : boolean
+}
+
+entity "Shop Items" as shop_items {
+  * $id : string
+  --
+  * name : string
+  * price : integer
+  * type : enum
+  description : string
+}
+
+entity "Questions" as questions {
+  * $id : string
+  --
+  * chapterId : integer
+  * levelId : integer
+  * question : string
+  * type : string
+  * correctAnswer : string
+  options : string
+  points : integer
+}
+
+' Relationships
+users ||--|| user_progress
+users ||--o{ user_quests
+quests ||--o{ user_quests
+users }o--o{ shop_items
+
+@enduml

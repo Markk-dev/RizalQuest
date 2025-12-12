@@ -1,0 +1,36 @@
+@startuml Authentication System
+
+|User|
+start
+:Enter Credentials;
+
+|System|
+:Validate Input;
+:Hash Password;
+
+|Database|
+:Check User Exists;
+:Verify Password Hash;
+
+|System|
+if (Valid Credentials?) then (yes)
+  :Create Session;
+  :Set Role (Student/Admin);
+else (no)
+  :Return Error;
+endif
+
+|User|
+if (Authentication Success?) then (yes)
+  if (Role = Admin?) then (yes)
+    :Redirect to Admin Dashboard;
+  else (no)
+    :Redirect to Student Portal;
+  endif
+else (no)
+  :Show Login Error;
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml Admin Dashboard Flow
+
+|Admin|
+start
+:Login;
+
+|Database|
+:Fetch Analytics Data;
+
+|Admin|
+:View Dashboard Analytics;
+
+|Database|
+:Load Student Progress;
+
+|Admin|
+:Monitor Student Progress;
+
+|Database|
+:Update Student Info;
+
+|Admin|
+:Manage Student Accounts;
+
+|Database|
+:Save Quest Data;
+
+|Admin|
+:Create/Update Quests;
+
+|Database|
+:Generate Class Stats;
+
+|Admin|
+:Review Class Performance;
+stop
+
+@enduml

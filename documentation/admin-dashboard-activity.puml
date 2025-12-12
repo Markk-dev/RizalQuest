@@ -1,0 +1,27 @@
+@startuml Admin Dashboard Activity
+
+start
+
+:Admin Login;
+
+:Access Dashboard;
+
+:View Student List;
+
+:Monitor Progress;
+
+:Generate Analytics;
+
+:View Reports;
+
+:Manage Quests;
+
+:Configure Shop;
+
+:Export Data;
+
+:Review Performance;
+
+stop
+
+@enduml

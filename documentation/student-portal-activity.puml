@@ -1,0 +1,26 @@
+@startuml Student Portal Activity
+
+start
+
+:Student Login;
+
+:Select Chapter & Level;
+
+fork
+    :Answer Questions;
+    :Earn XP / Lose Hearts;
+fork again
+    :Complete Quests;
+    :Get Bonus Rewards;
+fork again
+    :Shop System;
+    :Purchase Items;
+endfork
+
+:Track Progress;
+
+:View Analytics;
+
+stop
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml Authentication Sequence
+
+participant User
+participant System
+participant Database
+
+User -> System: Enter Credentials
+System -> System: Validate Input
+System -> System: Hash Password
+System -> Database: Check User Exists
+Database --> System: User Data
+System -> Database: Verify Password Hash
+Database --> System: Password Valid
+
+alt Valid Credentials
+    System -> System: Create Session
+    System -> System: Set Role (Student/Admin)
+    
+    alt Role = Admin
+        System --> User: Route to Admin Dashboard
+    else Role = Student
+        System --> User: Redirect to Student Portal
+    end
+    
+else Invalid Credentials
+    System --> User: Show Login Error
+end
+
+@enduml
