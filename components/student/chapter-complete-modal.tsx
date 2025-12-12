@@ -40,7 +40,7 @@ export default function ChapterCompleteModal({
 
       // Play celebration sound when modal opens
       try {
-        const celebrationAudio = new Audio("/sounds/success.ogg")
+        const celebrationAudio = new Audio("/sounds/congratulations.ogg")
         celebrationAudio.volume = 0.7
         celebrationAudio
           .play()
