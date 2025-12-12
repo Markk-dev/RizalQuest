@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { BookOpen, Award, Target, ShoppingBag, LogOut } from "lucide-react"
+import { BookOpen, Award, Target, ShoppingBag, LogOut, X } from "lucide-react"
 
 const MENU_ITEMS = [
   { label: "Learn", icon: BookOpen, href: "/student/learn" },
@@ -12,7 +12,12 @@ const MENU_ITEMS = [
   { label: "Shop", icon: ShoppingBag, href: "/student/shop" },
 ]
 
-export default function StudentSidebar() {
+interface StudentSidebarProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export default function StudentSidebar({ isOpen = true, onClose }: StudentSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [userName, setUserName] = useState("Student")
@@ -44,16 +49,46 @@ export default function StudentSidebar() {
     router.push("/")
   }
 
+  const handleLinkClick = () => {
+    playClickSound()
+    onClose?.()
+  }
+
   return (
-    <aside className="w-64 bg-gray-50 border-r border-gray-200 p-6 flex flex-col h-screen sticky top-0">
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:sticky top-0 left-0 z-50
+        w-80 bg-gray-50 border-r border-gray-200 p-6 
+        flex flex-col h-screen
+        transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
       {/* Logo */}
       <div className="mb-8 pb-6 border-b border-gray-200">
-        <Link href="/student/learn">
-          <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-            <div className="text-3xl">🏵️</div>
-            <h1 className="text-xl font-bold text-black">Hero's Journey</h1>
-          </div>
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/student/learn" onClick={handleLinkClick}>
+            <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+              <div className="text-3xl">🏵️</div>
+              <h1 className="text-xl font-bold text-black">Hero's Journey</h1>
+            </div>
+          </Link>
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 hover:bg-gray-200 rounded-lg transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -65,7 +100,7 @@ export default function StudentSidebar() {
           return (
             <Link key={item.href} href={item.href}>
               <button
-                onClick={playClickSound}
+                onClick={handleLinkClick}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive ? "bg-primary text-white font-semibold shadow-md" : "text-gray-dark hover:bg-gray-light"
                 }`}
@@ -99,5 +134,6 @@ export default function StudentSidebar() {
         </button>
       </div>
     </aside>
+    </>
   )
 }

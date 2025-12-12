@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import QuestionRenderer from "@/components/student/question-renderer"
 import QuizHeader from "@/components/student/quiz-header"
+import ChapterCompleteModal from "@/components/student/chapter-complete-modal"
 import { CHAPTERS } from "@/lib/constants"
 import { getQuestionsForLevel } from "@/lib/questions"
 import { getQuestionsForChapterLevel } from "@/lib/question-service"
@@ -22,6 +23,8 @@ export default function LessonPage() {
   const [hearts, setHearts] = useState(5)
   const [xp, setXp] = useState(0)
   const [levelStartTime] = useState(Date.now())
+  const [showChapterComplete, setShowChapterComplete] = useState(false)
+  const [completedChapterInfo, setCompletedChapterInfo] = useState({ number: 1, title: "" })
 
   const chapter = CHAPTERS.find((c) => c.id === chapterId)
   const chapterData = storyline.chapters.find((c) => c.chapter === chapterId)
@@ -234,11 +237,19 @@ export default function LessonPage() {
         ).catch(console.error)
       }
 
-      if (isLastLevel && chapterId >= 8) {
+      // Check if this is a chapter completion (level 5) AND first time
+      if (isLastLevel && isFirstTimeCompletion) {
+        // Show chapter complete modal
+        setCompletedChapterInfo({
+          number: chapterId,
+          title: chapterData?.title || ""
+        })
+        setShowChapterComplete(true)
+      } else if (isLastLevel && chapterId >= 8) {
         // Completed all chapters!
         router.push("/student/learn")
       } else if (isLastLevel) {
-        // Go to next chapter
+        // Go to next chapter (replay)
         router.push("/student/learn")
       } else {
         // Go to next level
@@ -259,14 +270,26 @@ export default function LessonPage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Quiz Header with Hearts and Progress */}
-      <QuizHeader hearts={hearts} progress={progress} />
+    <>
+      <ChapterCompleteModal
+        isOpen={showChapterComplete}
+        chapterNumber={completedChapterInfo.number}
+        chapterTitle={completedChapterInfo.title}
+        onNext={() => {
+          setShowChapterComplete(false)
+          router.push("/student/learn")
+        }}
+      />
 
-      {/* Main Content */}
-      <div className="pt-24 pb-12 px-4">
-        <QuestionRenderer question={currentQuestion} onAnswer={handleAnswer} onNext={handleNext} />
+      <div className="min-h-screen bg-white">
+        {/* Quiz Header with Hearts and Progress */}
+        <QuizHeader hearts={hearts} progress={progress} />
+
+        {/* Main Content */}
+        <div className="pt-24 pb-12 px-4">
+          <QuestionRenderer question={currentQuestion} onAnswer={handleAnswer} onNext={handleNext} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

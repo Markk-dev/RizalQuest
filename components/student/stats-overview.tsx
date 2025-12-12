@@ -26,11 +26,10 @@ export default function StatsOverview() {
   ]
 
   return (
-    <div className="space-y-8">
-      {/* Performance by Chapter - Line Graph */}
-      <div className="bg-white rounded-xl border-2 border-b-4 border-gray-300 shadow-md p-6">
-        <h3 className="text-xl font-bold text-black mb-4">Performance by Chapter</h3>
-        <ResponsiveContainer width="100%" height={200}>
+    <div className="bg-white rounded-2xl border-2 border-b-4 border-gray-200 p-6 h-full flex flex-col">
+      <h3 className="text-2xl font-bold text-black mb-4">Performance by Chapter</h3>
+      <div className="flex-1 min-h-0">
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={performanceByChapter}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="chapter" stroke="#6b7280" />
@@ -53,7 +52,6 @@ export default function StatsOverview() {
           </LineChart>
         </ResponsiveContainer>
       </div>
-
     </div>
   )
 }

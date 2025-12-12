@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react"
 import { Zap, Clock, Flame, CheckCircle } from "lucide-react"
 import StatsOverview from "@/components/student/stats-overview"
+import TopStudents from "@/components/student/top-students"
 
 export default function StatsPage() {
   const [stats, setStats] = useState({
@@ -123,7 +124,10 @@ export default function StatsPage() {
         />
       </div>
 
-      <StatsOverview />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <StatsOverview />
+        <TopStudents />
+      </div>
     </div>
   )
 }

@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { Menu } from "lucide-react"
 import StudentSidebar from "@/components/student/sidebar"
 import NavigationGuard from "@/components/shared/navigation-guard"
 
@@ -13,12 +14,18 @@ export default function StudentLayout({
 }) {
   const pathname = usePathname()
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   
   // Hide sidebar on lesson pages (when URL matches /student/learn/[chapterId]/[levelId])
   const isLessonPage = /^\/student\/learn\/\d+\/\d+/.test(pathname)
   
   // Hide sidebar on story pages (when URL matches /student/learn/story/[chapterId])
   const isStoryPage = /^\/student\/learn\/story\/\d+/.test(pathname)
+
+  // Close sidebar when route changes
+  useEffect(() => {
+    setIsSidebarOpen(false)
+  }, [pathname])
 
   useEffect(() => {
     // Initialize background music
@@ -54,7 +61,20 @@ export default function StudentLayout({
         <main className="min-h-screen">{children}</main>
       ) : (
         <div className="flex min-h-screen bg-gray-light">
-          <StudentSidebar />
+          <StudentSidebar 
+            isOpen={isSidebarOpen} 
+            onClose={() => setIsSidebarOpen(false)} 
+          />
+          
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="fixed top-4 left-4 z-30 lg:hidden p-3 bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:bg-gray-50 transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu size={24} className="text-gray-700" />
+          </button>
+
           <main className="flex-1">{children}</main>
         </div>
       )}
