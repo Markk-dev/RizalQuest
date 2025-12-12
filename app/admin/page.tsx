@@ -43,7 +43,6 @@ export default function AdminPage() {
     <div className="p-8 max-w-[1600px] mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-bold text-black">Admin Dashboard</h1>
-        <span className="text-sm text-gray-600">Real-time Analytics</span>
       </div>
 
       {/* Stats Cards */}
@@ -154,7 +153,6 @@ export default function AdminPage() {
                 <th className="text-left py-3 px-4 font-bold text-gray-700">XP</th>
                 <th className="text-left py-3 px-4 font-bold text-gray-700">Hearts</th>
                 <th className="text-left py-3 px-4 font-bold text-gray-700">Current Chapter</th>
-                <th className="text-left py-3 px-4 font-bold text-gray-700">Chapters Completed</th>
               </tr>
             </thead>
             <tbody>
@@ -164,7 +162,6 @@ export default function AdminPage() {
                   <td className="py-3 px-4">{student.xp}</td>
                   <td className="py-3 px-4">{student.hearts}</td>
                   <td className="py-3 px-4">Chapter {student.currentChapter}</td>
-                  <td className="py-3 px-4">{student.chaptersCompleted}</td>
                 </tr>
               ))}
             </tbody>

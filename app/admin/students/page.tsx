@@ -155,7 +155,7 @@ export default function AdminStudentsPage() {
             <Search size={18} className="text-gray" />
             <input
               type="text"
-              placeholder="Search students by name or email..."
+              placeholder="Search students by name or username..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 bg-transparent outline-none text-black placeholder-gray"
