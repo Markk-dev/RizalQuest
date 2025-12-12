@@ -104,6 +104,10 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
     setAnswered(true)
     
     if (!correct && hearts !== null) {
+      // Check if shield is active
+      const activeBoosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+      const shieldActive = activeBoosts.shield && activeBoosts.shield > Date.now()
+      
       // Increment wrong attempts
       const newWrongAttempts = wrongAttempts + 1
       setWrongAttempts(newWrongAttempts)
@@ -138,7 +142,7 @@ export default function Typing({ question, onAnswer, onNext }: TypingProps) {
         })
       }
       
-      const newHearts = Math.max(0, hearts - 1)
+      const newHearts = shieldActive ? hearts : Math.max(0, hearts - 1)
       setHearts(newHearts)
       
       // Update user object in localStorage

@@ -184,6 +184,12 @@ export default function LearnSidebar() {
               if (dailyXpData.date === today) {
                 current = dailyXpData.xp
               }
+            } else if (quest.type === "spend_xp") {
+              // Get XP spent today only
+              const dailySpentData = JSON.parse(localStorage.getItem("dailyXPSpent") || '{"date": "", "xp": 0}')
+              if (dailySpentData.date === today) {
+                current = dailySpentData.xp
+              }
             } else if (quest.type === "levels") {
               // Get levels completed today only
               const dailyLevelsData = JSON.parse(localStorage.getItem("dailyLevels") || '{"date": "", "count": 0}')

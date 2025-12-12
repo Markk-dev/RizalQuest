@@ -62,7 +62,11 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
     setAnswered(true)
     
     if (!correct && hearts !== null) {
-      const newHearts = Math.max(0, hearts - 1)
+      // Check if shield is active
+      const activeBoosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+      const shieldActive = activeBoosts.shield && activeBoosts.shield > Date.now()
+      
+      const newHearts = shieldActive ? hearts : Math.max(0, hearts - 1)
       setHearts(newHearts)
       
       // Update user object in localStorage
@@ -87,6 +91,12 @@ export default function FillInBlanks({ question, onAnswer, onNext }: FillInBlank
       
       // Dispatch event so other components update
       window.dispatchEvent(new CustomEvent("heartsUpdated", { detail: { hearts: newHearts } }))
+      
+      // Show shield protection message if active
+      if (shieldActive) {
+        // Optional: Show a toast that shield protected them
+        console.log("Shield protected you from losing a heart!")
+      }
       
       // Show modal if no hearts left
       if (newHearts === 0) {

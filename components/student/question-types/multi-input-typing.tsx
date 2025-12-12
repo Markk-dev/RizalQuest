@@ -68,6 +68,10 @@ export default function MultiInputTyping({ question, onAnswer, onNext }: MultiIn
     setAnswered(true)
     
     if (!correct && hearts !== null) {
+      // Check if shield is active
+      const activeBoosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+      const shieldActive = activeBoosts.shield && activeBoosts.shield > Date.now()
+      
       const newWrongAttempts = wrongAttempts + 1
       setWrongAttempts(newWrongAttempts)
       
@@ -99,7 +103,7 @@ export default function MultiInputTyping({ question, onAnswer, onNext }: MultiIn
         })
       }
       
-      const newHearts = Math.max(0, hearts - 1)
+      const newHearts = shieldActive ? hearts : Math.max(0, hearts - 1)
       setHearts(newHearts)
       
       const user = JSON.parse(localStorage.getItem("user") || "{}")

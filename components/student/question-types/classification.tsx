@@ -81,7 +81,11 @@ export default function Classification({ question, onAnswer, onNext }: Classific
     setAnswered(true)
     
     if (!correct) {
-      const newHearts = Math.max(0, hearts - 1)
+      // Check if shield is active
+      const activeBoosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
+      const shieldActive = activeBoosts.shield && activeBoosts.shield > Date.now()
+      
+      const newHearts = shieldActive ? hearts : Math.max(0, hearts - 1)
       setHearts(newHearts)
       
       // Update user object in localStorage

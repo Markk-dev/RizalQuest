@@ -211,6 +211,21 @@ export default function ShopPage() {
     localStorage.setItem("user", JSON.stringify(user))
     setXp(newXP)
 
+    // Track XP spent for daily quest
+    const today = new Date().toDateString()
+    const dailySpentData = JSON.parse(localStorage.getItem("dailyXPSpent") || '{"date": "", "xp": 0}')
+    
+    if (dailySpentData.date === today) {
+      // Same day, add to spent XP
+      dailySpentData.xp += item.cost
+    } else {
+      // New day, reset
+      dailySpentData.date = today
+      dailySpentData.xp = item.cost
+    }
+    
+    localStorage.setItem("dailyXPSpent", JSON.stringify(dailySpentData))
+
     // Sync to database
     try {
       const xpResponse = await fetch("/api/progress/sync", {
