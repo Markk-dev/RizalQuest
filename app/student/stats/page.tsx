@@ -61,7 +61,7 @@ export default function StatsPage() {
       const timeData = JSON.parse(localStorage.getItem("levelTimes") || '{"times": [], "total": 0, "count": 0}')
       
       if (timeData.count === 0) {
-        return "0m 0s"
+        return "No data"
       }
       
       const avgMs = timeData.total / timeData.count
