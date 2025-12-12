@@ -51,7 +51,7 @@ export default function StudentSidebar() {
         <Link href="/student/learn">
           <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
             <div className="text-3xl">🏵️</div>
-            <h1 className="text-xl font-bold text-black">Rizal Quest</h1>
+            <h1 className="text-xl font-bold text-black">Hero's Journey</h1>
           </div>
         </Link>
       </div>

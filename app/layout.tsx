@@ -11,10 +11,15 @@ const geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Rizal Quest - Learn Philippine History Through Games",
   description: "A gamified learning platform about José Rizal and Philippine history designed for students",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   icons: {
     icon: [{ url: "/favicon.ico" }],
   },
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({

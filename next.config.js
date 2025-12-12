@@ -4,11 +4,6 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  experimental: {
-    turbo: {
-      resolveAlias: {},
-    },
-  },
 }
 
 module.exports = nextConfig

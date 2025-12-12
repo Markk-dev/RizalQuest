@@ -64,7 +64,7 @@ export function StudentLoginForm({
                 🏵️
               </div>
             </a>
-            <h1 className="text-2xl font-bold">Welcome to Rizal Quest</h1>
+            <h1 className="text-2xl font-bold">Welcome to Hero's Journey</h1>
             <FieldDescription>
               Student Portal - Learn about José Rizal
             </FieldDescription>
