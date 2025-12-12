@@ -97,7 +97,7 @@ export default function StatsPage() {
         />
         <StatCard 
           icon={Clock}
-          label="Avg Time" 
+          label="Your Avg Time" 
           value={stats.avgTime}
           bgColor="bg-purple-50"
           borderColor="border-purple-300"

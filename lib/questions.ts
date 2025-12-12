@@ -144,10 +144,9 @@ const QUESTION_BANK = {
         correct: 1,
       },
       {
-        type: "multiple-choice",
-        question: "He was the __ child in the middle of his big family.",
-        options: ["5th", "7th", "9th", "11th"],
-        correct: 1,
+        type: "drawing",
+        question: "Trace Rizal's Pony Alipato, to continue",
+        imageUrl: "/traceable/pony.png"
       },
     ],
   },
@@ -427,9 +426,10 @@ const QUESTION_BANK = {
         acceptedAnswers: ["Berlin", "berlin", "BERLIN"]
       },
       {
-        type: "drawing",
-        question: "Trace Rizal's Pony Alipato, to continue",
-        imageUrl: "/traceable/pony.png"
+        type: "multiple-choice",
+        question: "He was the __ child in the middle of his big family.",
+        options: ["5th", "7th", "9th", "11th"],
+        correct: 1,
       },
     ],
     5: [

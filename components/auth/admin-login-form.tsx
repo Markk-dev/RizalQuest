@@ -20,17 +20,40 @@ export function AdminLoginForm({
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
     
-    // Add your admin login logic here
-    // For now, just redirect to admin portal
-    setTimeout(() => {
-      localStorage.setItem("userRole", "admin")
+    try {
+      // Import loginUser from auth-service
+      const { loginUser } = await import('@/lib/auth-service')
+      
+      // Clear all previous user data before logging in
+      localStorage.clear()
+      
+      // Authenticate with Appwrite
+      const user = await loginUser(username, password)
+      
+      // Verify user is actually an admin
+      if (user.role !== "admin") {
+        setError("Access denied. Admin credentials required.")
+        setIsLoading(false)
+        return
+      }
+      
+      // Store user data in localStorage
+      localStorage.setItem("userRole", user.role)
+      localStorage.setItem("user", JSON.stringify(user))
+      
+      // Redirect to admin dashboard
       router.push("/admin")
-    }, 1000)
+    } catch (err: any) {
+      setError(err.message || "Login failed")
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -75,6 +98,12 @@ export function AdminLoginForm({
               required
             />
           </Field>
+          
+          {error && (
+            <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded-md">
+              {error}
+            </div>
+          )}
           
           <Field>
             <Button type="submit" className="w-full" disabled={isLoading}>

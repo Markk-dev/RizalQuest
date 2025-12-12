@@ -340,7 +340,7 @@ Q3: ___ was the Capital of Germany
 Type: Typing
 ANSWER: Berlin
 
-Q4: Trace Rizal's Pony Alipato, to continue
+Q5: Trace Rizal's Pony Alipato, to continue
 Type: Drawing
 Image: /traceable/pony.png
 
