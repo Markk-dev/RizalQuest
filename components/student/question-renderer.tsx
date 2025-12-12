@@ -21,6 +21,7 @@ export default function QuestionRenderer({ question, onAnswer, onNext }: Questio
       return <QuizQuestion question={question} onAnswer={onAnswer} onNext={onNext} />
     
     case "typing":
+    case "spelling":
       return <TypingQuestion question={question} onAnswer={onAnswer} onNext={onNext} />
     
     case "multi-input-typing":

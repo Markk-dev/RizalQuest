@@ -38,20 +38,23 @@ export default function QuizQuestion({ question, onAnswer, onNext }: QuizQuestio
   }, [])
 
   useEffect(() => {
-    // Shuffle options when question changes
-    const optionsWithIndex = question.options.map((option, index) => ({
-      option,
-      originalIndex: index
-    }))
-    
-    // Fisher-Yates shuffle
-    const shuffled = [...optionsWithIndex]
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    // Shuffle options when question changes (only for multiple choice questions)
+    if (question.options && Array.isArray(question.options)) {
+      const optionsWithIndex = question.options.map((option, index) => ({
+        option,
+        originalIndex: index
+      }))
+      
+      // Fisher-Yates shuffle
+      const shuffled = [...optionsWithIndex]
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+      }
+      
+      setShuffledOptions(shuffled)
     }
     
-    setShuffledOptions(shuffled)
     setSelectedIndex(null)
     setSelectedIndices([])
     setIsAnswered(false)

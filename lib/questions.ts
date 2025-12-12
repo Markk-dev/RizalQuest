@@ -584,7 +584,7 @@ const QUESTION_BANK = {
     // Chapter 5: Advocacy and Reform
     1: [
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal wanted a bloody war for the Philippines.",
         options: ["True", "False"],
         correct: 1,
@@ -604,14 +604,14 @@ const QUESTION_BANK = {
       },
       {
         type: "spelling",
-        question: "Spell the word: SOLIDARIDAD",
+        question: "Spell the name of the newspaper Rizal wrote for (hint: it means 'solidarity' in Spanish)",
         correctAnswer: "solidaridad",
-        acceptedAnswers: ["solidaridad", "Solidaridad", "SOLIDARIDAD"]
+        acceptedAnswers: ["solidaridad", "Solidaridad", "SOLIDARIDAD", "La Solidaridad", "la solidaridad", "LA SOLIDARIDAD"]
       },
     ],
     2: [
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal believed education was the key to freedom.",
         options: ["True", "False"],
         correct: 0,
@@ -630,7 +630,7 @@ const QUESTION_BANK = {
         placeholder: "Type one..."
       },
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal used his real name for all his writings.",
         options: ["True", "False"],
         correct: 1,
@@ -644,14 +644,14 @@ const QUESTION_BANK = {
         acceptedAnswers: ["La Liga Filipina", "la liga filipina", "LA LIGA FILIPINA", "La liga filipina"]
       },
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "La Liga Filipina was created to unite Filipinos.",
         options: ["True", "False"],
         correct: 0,
       },
       {
         type: "spelling",
-        question: "Spell the word: FILIPINA",
+        question: "Spell the second word in 'La Liga ___' (the group Rizal started)",
         correctAnswer: "filipina",
         acceptedAnswers: ["filipina", "Filipina", "FILIPINA"]
       },
@@ -665,7 +665,7 @@ const QUESTION_BANK = {
     ],
     4: [
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal wanted the Philippines to become a province of Spain with equal rights.",
         options: ["True", "False"],
         correct: 0,
@@ -677,7 +677,7 @@ const QUESTION_BANK = {
         acceptedAnswers: ["sword", "Sword", "SWORD"]
       },
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal used violence to fight for justice.",
         options: ["True", "False"],
         correct: 1,
@@ -698,14 +698,14 @@ const QUESTION_BANK = {
         acceptedAnswers: ["writing", "words", "pen", "Writing", "Words", "Pen", "WRITING", "WORDS", "PEN", "his writing", "his words", "his pen", "His writing", "His words", "His pen"]
       },
       {
-        type: "true-false",
+        type: "multiple-choice",
         question: "Rizal believed peaceful change was better than war.",
         options: ["True", "False"],
         correct: 0,
       },
       {
         type: "spelling",
-        question: "Spell the word: ADVOCACY",
+        question: "Spell the word that means 'supporting a cause or policy' (starts with A)",
         correctAnswer: "advocacy",
         acceptedAnswers: ["advocacy", "Advocacy", "ADVOCACY"]
       },
