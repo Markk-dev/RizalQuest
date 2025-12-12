@@ -9,7 +9,7 @@ const SHOP_ITEMS = [
     image: "/Shop/Heart.png",
     name: "1 Heart",
     description: "Get 1 extra life",
-    cost: 50,
+    cost: 25,
     borderColor: "border-red-400",
     borderBottomColor: "border-b-red-500",
     buttonColor: "bg-red-500 border-red-600 border-b-red-700 hover:bg-red-600",
@@ -18,7 +18,7 @@ const SHOP_ITEMS = [
     id: "shield",
     image: "/Shop/Shield.png",
     name: "Shield Boost",
-    description: "Protect you from losing hearts for 15 mins",
+    description: "Protect you from losing hearts for 10 mins",
     cost: 100,
     borderColor: "border-blue-400",
     borderBottomColor: "border-b-blue-500",
@@ -28,7 +28,7 @@ const SHOP_ITEMS = [
     id: "xp-multiplier",
     image: "/Shop/Exp.png",
     name: "2x XP Multiplier",
-    description: "Double XP for 30 mins",
+    description: "Double XP for 20 mins",
     cost: 150,
     borderColor: "border-yellow-400",
     borderBottomColor: "border-b-yellow-500",
@@ -185,26 +185,26 @@ export default function ShopPage() {
       // Dispatch event to update UI
       window.dispatchEvent(new CustomEvent("heartsUpdated", { detail: { hearts: newHearts } }))
     } else if (item.id === "shield") {
-      // Activate shield for 15 minutes
-      const expiresAt = Date.now() + (15 * 60 * 1000)
+      // Activate shield for 10 minutes
+      const expiresAt = Date.now() + (10 * 60 * 1000)
       const boosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
       boosts.shield = expiresAt
       localStorage.setItem("activeBoosts", JSON.stringify(boosts))
       setActiveBoosts(boosts)
       
       toast.success("Shield activated!", {
-        description: "You won't lose hearts for 15 minutes"
+        description: "You won't lose hearts for 10 minutes"
       })
     } else if (item.id === "xp-multiplier") {
-      // Activate XP multiplier for 30 minutes
-      const expiresAt = Date.now() + (30 * 60 * 1000)
+      // Activate XP multiplier for 20 minutes
+      const expiresAt = Date.now() + (20 * 60 * 1000)
       const boosts = JSON.parse(localStorage.getItem("activeBoosts") || "{}")
       boosts.xpMultiplier = expiresAt
       localStorage.setItem("activeBoosts", JSON.stringify(boosts))
       setActiveBoosts(boosts)
       
       toast.success("XP Multiplier activated!", {
-        description: "You'll earn 2x XP for 30 minutes"
+        description: "You'll earn 2x XP for 20 minutes"
       })
     }
 
