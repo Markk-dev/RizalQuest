@@ -580,6 +580,144 @@ const QUESTION_BANK = {
       },
     ],
   },
+  5: {
+    // Chapter 5: Advocacy and Reform
+    1: [
+      {
+        type: "true-false",
+        question: "Rizal wanted a bloody war for the Philippines.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+      {
+        type: "typing",
+        question: "What was the name of the newspaper Rizal wrote for?",
+        correctAnswer: "La Solidaridad",
+        acceptedAnswers: ["La Solidaridad", "la solidaridad", "LA SOLIDARIDAD", "La solidaridad"]
+      },
+      {
+        type: "multi-input-typing",
+        question: "Name two pen names Rizal used (type each separately):",
+        correctAnswers: "Laong Laan,Dimasalang,laong laan,dimasalang,LAONG LAAN,DIMASALANG",
+        inputCount: 2,
+        placeholder: "Type a pen name..."
+      },
+      {
+        type: "spelling",
+        question: "Spell the word: SOLIDARIDAD",
+        correctAnswer: "solidaridad",
+        acceptedAnswers: ["solidaridad", "Solidaridad", "SOLIDARIDAD"]
+      },
+    ],
+    2: [
+      {
+        type: "true-false",
+        question: "Rizal believed education was the key to freedom.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "According to Rizal, who are the hope of the fatherland?",
+        correctAnswer: "youth",
+        acceptedAnswers: ["youth", "the youth", "Youth", "The Youth", "YOUTH", "THE YOUTH"]
+      },
+      {
+        type: "multi-input-typing",
+        question: "Name two things Rizal wrote for La Solidaridad:",
+        correctAnswers: "letters,essays,articles,Letters,Essays,Articles,LETTERS,ESSAYS,ARTICLES",
+        inputCount: 2,
+        placeholder: "Type one..."
+      },
+      {
+        type: "true-false",
+        question: "Rizal used his real name for all his writings.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+    ],
+    3: [
+      {
+        type: "typing",
+        question: "What group did Rizal help start in the Philippines?",
+        correctAnswer: "La Liga Filipina",
+        acceptedAnswers: ["La Liga Filipina", "la liga filipina", "LA LIGA FILIPINA", "La liga filipina"]
+      },
+      {
+        type: "true-false",
+        question: "La Liga Filipina was created to unite Filipinos.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "spelling",
+        question: "Spell the word: FILIPINA",
+        correctAnswer: "filipina",
+        acceptedAnswers: ["filipina", "Filipina", "FILIPINA"]
+      },
+      {
+        type: "multi-input-typing",
+        question: "What two things did La Liga Filipina teach Filipinos to be?",
+        correctAnswers: "brave,united,Brave,United,BRAVE,UNITED",
+        inputCount: 2,
+        placeholder: "Type one quality..."
+      },
+    ],
+    4: [
+      {
+        type: "true-false",
+        question: "Rizal wanted the Philippines to become a province of Spain with equal rights.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "typing",
+        question: "Complete the phrase: 'The pen is mightier than the ___'",
+        correctAnswer: "sword",
+        acceptedAnswers: ["sword", "Sword", "SWORD"]
+      },
+      {
+        type: "true-false",
+        question: "Rizal used violence to fight for justice.",
+        options: ["True", "False"],
+        correct: 1,
+      },
+      {
+        type: "multi-input-typing",
+        question: "Name two things Rizal wanted for the Philippines:",
+        correctAnswers: "fair treatment,equal rights,justice,freedom,Fair Treatment,Equal Rights,Justice,Freedom,FAIR TREATMENT,EQUAL RIGHTS,JUSTICE,FREEDOM",
+        inputCount: 2,
+        placeholder: "Type one..."
+      },
+    ],
+    5: [
+      {
+        type: "typing",
+        question: "What did Rizal use instead of violence to push for change?",
+        correctAnswer: "writing",
+        acceptedAnswers: ["writing", "words", "pen", "Writing", "Words", "Pen", "WRITING", "WORDS", "PEN", "his writing", "his words", "his pen", "His writing", "His words", "His pen"]
+      },
+      {
+        type: "true-false",
+        question: "Rizal believed peaceful change was better than war.",
+        options: ["True", "False"],
+        correct: 0,
+      },
+      {
+        type: "spelling",
+        question: "Spell the word: ADVOCACY",
+        correctAnswer: "advocacy",
+        acceptedAnswers: ["advocacy", "Advocacy", "ADVOCACY"]
+      },
+      {
+        type: "multi-input-typing",
+        question: "Name two ways Rizal learned to fight for justice (from his childhood and travels):",
+        correctAnswers: "reading,traveling,education,seeing freedom,Reading,Traveling,Education,Seeing Freedom,READING,TRAVELING,EDUCATION,SEEING FREEDOM",
+        inputCount: 2,
+        placeholder: "Type one way..."
+      },
+    ],
+  },
 }
 
 // Get questions for a specific chapter and level (from local bank)

@@ -58,8 +58,8 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
   }
 
   return (
-    <div className={cn("flex w-full items-center justify-between rounded-xl p-5 text-white", colors.bg)}>
-      <div className="space-y-2.5">
+    <div className={cn("flex flex-col md:flex-row w-full items-center justify-between gap-4 rounded-xl p-5 text-white", colors.bg)}>
+      <div className="space-y-2.5 text-center md:text-left">
         <h3 className="text-2xl font-bold">{title}</h3>
         <p className="text-lg">{description}</p>
       </div>
@@ -70,12 +70,12 @@ export const UnitBanner = ({ title, description, chapterId }: UnitBannerProps) =
         onClick={handleReadClick}
         disabled={!isUnlocked}
         className={cn(
-          "hidden border-2 border-b-4 active:border-b-2 xl:flex text-white",
+          "flex border-2 border-b-4 active:border-b-2 text-white w-full md:w-auto",
           colors.btn,
           !isUnlocked && "opacity-50 cursor-not-allowed"
         )}
       >
-        <NotebookText className="mr-2" />
+        <NotebookText className="mr-2 h-4 w-4" />
         READ
       </Button>
     </div>
