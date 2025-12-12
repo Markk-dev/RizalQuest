@@ -25,11 +25,10 @@ export async function GET() {
           ? JSON.parse(progress.completedLevels)
           : []
 
-        // Calculate accuracy based on XP and completed levels
-        // Assuming max XP per level is 100, and 5 levels per chapter (8 chapters = 40 levels total)
-        const maxPossibleXP = completedLevels.length * 100
-        const accuracy =
-          maxPossibleXP > 0 ? Math.round((student.xp / maxPossibleXP) * 100) : 0
+        // Calculate progress percentage based on completed levels
+        // Total levels: 8 chapters × 5 levels = 40 levels
+        const TOTAL_LEVELS = 40
+        const progressPercentage = Math.round((completedLevels.length / TOTAL_LEVELS) * 100)
 
         return {
           id: student.$id,
@@ -38,7 +37,7 @@ export async function GET() {
           xp: student.xp,
           completedLevels: completedLevels.length,
           currentChapter: progress?.currentChapter || 1,
-          accuracy: Math.min(accuracy, 100), // Cap at 100%
+          accuracy: Math.min(progressPercentage, 100), // Cap at 100%
         }
       })
     )
