@@ -25,23 +25,13 @@ export default function EditLevelPage() {
   const loadQuestions = async () => {
     setLoading(true)
     try {
-      // Try to load from database first
-      const dbQuestions = await getQuestionsForChapterLevel(chapterId, levelId)
-      
-      if (dbQuestions && dbQuestions.length > 0) {
-        setQuestions(dbQuestions)
-      } else {
-        // Fallback to local question bank
-        const { getQuestionsForLevel } = await import("@/lib/questions")
-        const localQuestions = getQuestionsForLevel(chapterId, levelId)
-        setQuestions(localQuestions || [])
-      }
-    } catch (error) {
-      console.error("Error loading questions:", error)
-      // Fallback to local on error
+      // Use local question bank (database questions are outdated)
       const { getQuestionsForLevel } = await import("@/lib/questions")
       const localQuestions = getQuestionsForLevel(chapterId, levelId)
       setQuestions(localQuestions || [])
+    } catch (error) {
+      console.error("Error loading questions:", error)
+      setQuestions([])
     }
     setLoading(false)
   }

@@ -45,16 +45,9 @@ export default function LessonPage() {
       return
     }
     
-    // Try to load from database first, fallback to local
-    getQuestionsForChapterLevel(chapterId, levelId).then((dbQuestions) => {
-      if (dbQuestions && dbQuestions.length > 0) {
-        setQuestions(dbQuestions)
-      } else {
-        // Fallback to local question bank
-        const levelQuestions = getQuestionsForLevel(chapterId, levelId)
-        setQuestions(levelQuestions)
-      }
-    })
+    // Use local question bank (database questions are outdated)
+    const levelQuestions = getQuestionsForLevel(chapterId, levelId)
+    setQuestions(levelQuestions)
     
     // Load progress from database
     loadProgress().then((progress) => {
